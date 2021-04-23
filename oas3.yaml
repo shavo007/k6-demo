@@ -1,0 +1,309 @@
+openapi: 3.0.2
+info:
+  version: 1.0.0
+  title: Greeting API
+  termsOfService: 'https://example.com/terms/'
+  contact:
+    email: contact@example.com
+    url: 'http://example.com/contact'
+  license:
+    name: Apache 2.0
+    url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
+  x-logo:
+    url: >-
+      https://images.unsplash.com/photo-1595420832643-faf4aaf65c5b?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=634&q=80
+  description: >
+    This is an **example** API to demonstrate features of OpenAPI specification
+
+    # Introduction
+
+    This API definition is intended to to be a good starting point for
+    describing your API in
+
+    [OpenAPI/Swagger
+    format](https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.3.md).
+
+    It also demonstrates features of
+    [create-openapi-repo](https://github.com/Redocly/create-openapi-repo) tool
+    and
+
+    [Redoc](https://github.com/Redocly/Redoc) documentation engine. So beyond
+    the standard OpenAPI syntax we use a few
+
+    [vendor
+    extensions](https://github.com/Redocly/Redoc/blob/master/docs/redoc-vendor-extensions.md).
+
+
+    # OpenAPI Specification
+
+    The goal of The OpenAPI Specification is to define a standard,
+    language-agnostic interface to REST APIs which
+
+    allows both humans and computers to discover and understand the capabilities
+    of the service without access to source
+
+    code, documentation, or through network traffic inspection. When properly
+    defined via OpenAPI, a consumer can
+
+    understand and interact with the remote service with a minimal amount of
+    implementation logic. Similar to what
+
+    interfaces have done for lower-level programming, OpenAPI removes the
+    guesswork in calling the service.
+externalDocs:
+  description: Find out how to create a GitHub repo for your OpenAPI definition.
+  url: 'https://github.com/Rebilly/generator-openapi-repo'
+tags:
+  - name: Greetings
+    description: Endpoints to manage greetings using the REST API
+servers:
+  - url: 'http://host.docker.internal:8081'
+paths:
+  /greetings/{greetingId}:
+    get:
+      description: "get a greeting by ID"
+      tags:
+        - "Greetings"
+      summary: Get a greeting by ID
+      operationId:   greetings/get
+      security:
+        - api_key: []
+      parameters:
+      - $ref: '#/components/parameters/greetingId'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                  $ref: '#/components/schemas/Greeting'
+        '401':
+          description: Unauthorised
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '405':
+          description: Method not allowed
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /greetings:
+    get:
+      tags:
+        - Greetings
+      summary: List greetings for the user
+      description: |
+        Some description of the operation.
+        You can use `markdown` here.
+      operationId: greetings/list
+      security:
+        - api_key: []
+      x-kong-plugin-rate-limiting:
+        enabled: true
+        config:
+          minute: 3
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Greeting'
+              examples:
+                default:
+                  $ref: '#/components/examples/GreetingItems'
+        '403':
+          description: Forbidden
+        '401':
+          description: Unauthorised
+        '405':
+          description: Method not allowed
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      x-code-samples:
+        - lang: Shell
+          label: Curl
+          source: |
+            curl --request GET \
+            --url http://localhost:8081/greetings \
+            --header 'Accept: application/json'
+    post:
+      summary: Create a greeting
+      description: |-
+        Allows you to add a new greeting.
+      operationId: greetings/create
+      tags:
+      - Greetings
+      externalDocs:
+        description: API method documentation
+        url: https://docs.pexa.com.au/v1/greetings/#create-a-greeting
+      parameters: []
+      requestBody:
+        description: 'Create a greeting request'
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Greeting'
+      responses:
+        '201':
+          description: 'Greeting created'
+          content:
+            'application/json':
+              schema:
+                $ref: '#/components/schemas/Greeting'
+        '400':
+          $ref: '#/components/responses/InvalidEnumBadRequest'
+        '401':
+          description: Unauthorised
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '405':
+          description: Method not allowed
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+components:
+  parameters:
+    greetingId:
+      name: greetingId
+      description: greetingId param
+      in: path
+      required: true
+      schema:
+        type: string
+        maxLength: 50
+  examples:
+    GreetingItems:
+      value:
+        - id: 1000
+          message: 'Hello Docker'
+          creationDate: '2017-07-21T17:32:28Z'
+          label: 'keys'
+          isFriendly: true
+          status: 'SMILEY_FACE'
+          weatherType: 1
+  responses:
+    BadRequest:
+      description: Bad request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Errors'
+    InvalidEnumBadRequest:
+      description: Bad request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Errors'
+          example:
+            errors:
+              - code: '400007'
+                message: 4 is invalid or not supported.
+                field: WeatherType
+    InternalServerError:
+      description: Internal server error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Errors'
+          example:
+            errors:
+              - code: '500001'
+                message: An internal error has occurred
+    NotFoundError:
+      description: Not found error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Errors'
+          example:
+            errors:
+              - code: '404001'
+                message: Invalid end point
+  securitySchemes:
+    api_key:
+      type: apiKey
+      in: header
+      name: api_key
+  schemas:
+    Greeting:
+      type: object
+      required:
+        - message
+        - isFriendly
+      properties:
+        id:
+          description: Id
+          type: integer
+          format: int64
+          example: 1000
+          readOnly: true
+        message:
+          description: Message
+          type: string
+          minLength: 1
+          maxLength: 50
+          example: Hello Docker
+        creationDate:
+          description: Creation Date
+          type: string
+          format: date-time
+          example: "2017-07-21T17:32:28Z"
+          readOnly: true
+        label:
+          type: string
+          minLength: 3
+          maxLength: 7
+          example: key
+        isFriendly:
+          type: boolean
+          example: true
+        weatherType:
+          $ref: '#/components/schemas/WeatherType'
+        status:
+          type: string
+          enum: ['SMILEY_FACE', 'SAD_FACE' ]
+
+    WeatherType:
+      type: integer
+      format: int32
+      enum:
+        - 1
+        - 2
+        - 3
+      x-enum-descriptions:
+        - 'Blue sky'
+        - 'Slightly overcast'
+        - 'Take an umbrella with you'
+      x-enum-varnames:
+        - SUNNY
+        - CLOUDY
+        - RAINY
+    Errors:
+      description: The list of errors related to the API
+      type: object
+      required:
+        - errors
+      properties:
+        errors:
+          type: array
+          items:
+            allOf:
+              - $ref: '#/components/schemas/Error'
+    Error:
+      description: A detailed error related to the API
+      type: object
+      properties:
+        code:
+          description: The error code
+          type: string
+          example: 'OB1401.005'
+        message:
+          description: A human-readable description of the error for debugging purposes
+          type: string
+          example: 'The message has not been provided'
+        field:
+          description: The name of the field provided in the original request (if any) that the error pertains to
+          type: string
+          example: 'message'
