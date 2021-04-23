@@ -74,6 +74,7 @@ This auto-generation of the load test script will help streamline the API testin
 docker run --rm -it -p8090:8081 shanelee007/greetings-api:latest #run greetings API
 yarn webpack
 k6 run dist/greetings.js
+yarn html #gen html report
 ```
 
 ## Resources
@@ -83,3 +84,4 @@ k6 run dist/greetings.js
 ## TODO
 
 - add in prettify
+- raise issue on stdout chars
