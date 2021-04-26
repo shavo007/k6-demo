@@ -30,7 +30,7 @@ To generate a TypeScript project that includes the dependencies and initial conf
 Clone the generated repository on your local machine, move to the project root folder and install the dependencies defined in [`package.json`](./package.json)
 
 ```bash
-yarn install
+yarn
 ```
 
 ## Running the test
