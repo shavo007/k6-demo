@@ -3,7 +3,7 @@
     "target": "es5",
     "moduleResolution": "node",
     "module": "commonjs",
-    "noEmit": true,
+    // "noEmit": true,
     "allowJs": true,
     "removeComments": true,
 
@@ -21,6 +21,11 @@
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
 
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    // Ensure that .d.ts files are created by tsc, but not .js files
+    "declaration": true,
+    "emitDeclarationOnly": true,
+    // Ensure that Babel can safely transpile files in the TypeScript project
+    "isolatedModules": true
   }
 }

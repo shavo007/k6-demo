@@ -1,0 +1,1799 @@
+{
+  "openapi": "3.0.1",
+  "info": { "title": "OpenAPI definition", "version": "v0" },
+  "externalDocs": {
+    "description": "Please find detail Business Rules here",
+    "url": "/dutiesformapi/download/BusinessRules.docx"
+  },
+  "servers": [
+    {
+      "url": "https://testing2.e-business.sro.vic.gov.au/dutiesformapi",
+      "description": "Generated server url"
+    }
+  ],
+  "paths": {
+    "/form/v1/create": {
+      "post": {
+        "tags": ["Create duties form"],
+        "summary": "Create Duties form",
+        "description": "Create the duties form",
+        "operationId": "create",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/FormViewData" }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "400": {
+            "description": "bad request",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ApiError" }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Entity",
+            "content": { "application/json": {} }
+          },
+          "201": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ApiResponse" }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": { "application/json": {} }
+          },
+          "500": {
+            "description": "Internal Server error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ApiError" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/form/v1/update/{formId}": {
+      "put": {
+        "tags": ["Update duties form"],
+        "summary": "Update Duties form",
+        "description": "Updates the duties form",
+        "operationId": "updateForm",
+        "parameters": [
+          {
+            "name": "formId",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer", "format": "int64" }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/FormViewUpdate" }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "404": {
+            "description": "Form not found",
+            "content": {
+              "*/*": { "schema": { "$ref": "#/components/schemas/ApiError" } }
+            }
+          },
+          "204": { "description": "successful operation" },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "*/*": { "schema": { "$ref": "#/components/schemas/ApiError" } }
+            }
+          }
+        }
+      }
+    },
+    "/status": {
+      "get": {
+        "tags": ["Check API Status"],
+        "summary": "Get the status of duties form API ",
+        "description": "Use it to verify duties form API is up and running",
+        "operationId": "status",
+        "responses": {
+          "500": {
+            "description": "Internal Server error. API is not up and running",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ApiError" }
+              }
+            }
+          },
+          "200": {
+            "description": "successful operation",
+            "content": { "text/plain": {} }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "AdditionalLand": {
+        "required": ["propertyAddress"],
+        "type": "object",
+        "properties": {
+          "propertyAddress": { "$ref": "#/components/schemas/Address" },
+          "marketValue": {
+            "maximum": 9999999999999999,
+            "exclusiveMaximum": false,
+            "minimum": 0.0,
+            "exclusiveMinimum": false,
+            "type": "number"
+          },
+          "area": {
+            "maximum": 9999999999999999,
+            "exclusiveMaximum": false,
+            "minimum": 0.0,
+            "exclusiveMinimum": false,
+            "type": "number"
+          },
+          "landIdentifierList": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/AdditionalLandIdentifier" }
+          },
+          "additionalLandNotIncludedInContractSection": {
+            "$ref": "#/components/schemas/AdditionalLandNotIncludedInContract"
+          }
+        }
+      },
+      "AdditionalLandIdentifier": {
+        "required": ["landIdentifierType"],
+        "type": "object",
+        "properties": {
+          "landIdentifierType": {
+            "type": "string",
+            "description": "Land identification type",
+            "example": "VOLUME_FOLIO",
+            "enum": [
+              "VOLUME_FOLIO",
+              "LOT_PLAN",
+              "BOOK_MEMORIAL",
+              "CROWN_ALLOTMENT"
+            ]
+          },
+          "lot": { "maxLength": 10, "minLength": 0, "type": "string" },
+          "plan": { "maxLength": 9, "minLength": 0, "type": "string" },
+          "volume": { "maxLength": 5, "minLength": 0, "type": "string" },
+          "folio": { "maxLength": 4, "minLength": 0, "type": "string" },
+          "property": { "$ref": "#/components/schemas/AdditionalLand" }
+        }
+      },
+      "AdditionalLandNotIncludedInContract": {
+        "required": ["additionalSaleOfLand"],
+        "type": "object",
+        "properties": {
+          "additionalSaleOfLand": { "type": "boolean" },
+          "percentInterestTransferred": {
+            "maximum": 100,
+            "minimum": 0,
+            "type": "integer",
+            "format": "int64"
+          },
+          "propertyList": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/AdditionalLand" }
+          }
+        }
+      },
+      "Address": {
+        "required": ["addressFormatType", "addressLine"],
+        "type": "object",
+        "properties": {
+          "addressFormatType": {
+            "type": "string",
+            "default": "FREETEXT",
+            "enum": [
+              "FREETEXT",
+              "HOUSE_BUILDING_SHOP",
+              "POSTAL_BOX",
+              "OVERSEAS"
+            ]
+          },
+          "addressLine": {
+            "maxLength": 120,
+            "minLength": 0,
+            "type": "string",
+            "example": "Level 2 121 Exhibition St, MELBOURNE VIC 3000"
+          },
+          "flatUnitType": {
+            "type": "string",
+            "enum": [
+              "ANTENNA",
+              "APARTMENT",
+              "AREA",
+              "AUTOMATED_TELLER_MACHINE",
+              "AUTOMATIC_TELLER",
+              "BARBECUE",
+              "BOATSHED",
+              "BUILDING",
+              "BUNGALOW",
+              "CAFETERIA",
+              "CAGE",
+              "CARPARK",
+              "CARSPACE",
+              "CLUB",
+              "CONDOMINIUM",
+              "COOLROOM",
+              "COTTAGE",
+              "DUPLEX",
+              "FACTORY",
+              "FLAT",
+              "GARAGE",
+              "HALL",
+              "HOUSE",
+              "KIOSK",
+              "LEASE",
+              "LOBBY",
+              "LOFT",
+              "LOT",
+              "MAISONETTE",
+              "MARINE_BERTH",
+              "MART",
+              "MAST",
+              "OFFICE",
+              "PENTHOUSE",
+              "RESERVE",
+              "RESTAURANT",
+              "ROOM",
+              "SHED",
+              "SHOP",
+              "SHOWROOM",
+              "SIGN",
+              "SITE",
+              "STALL",
+              "STORE",
+              "STUDIO",
+              "SUBSTATION",
+              "SUITE",
+              "SURGERY",
+              "TENANCY",
+              "THEATRE",
+              "TOWER",
+              "TOWNHOUSE",
+              "UNIT",
+              "VILLA",
+              "WARD",
+              "WAREHOUSE",
+              "WORKSHOP",
+              "YARD"
+            ]
+          },
+          "flatUnitNumber": {
+            "maxLength": 7,
+            "minLength": 0,
+            "type": "string"
+          },
+          "floorLevelType": {
+            "type": "string",
+            "enum": [
+              "BASEMENT",
+              "BELOW",
+              "FLOOR",
+              "GROUND_FLOOR",
+              "LEVEL",
+              "LOWER_GROUND_FLOOR",
+              "MEZZANIE",
+              "OVER",
+              "ROOF",
+              "TOP",
+              "UNKNOWN",
+              "UPPER_GROUND_FLOOR",
+              "UPSTAIRS",
+              "LOWER_LEVEL",
+              "OBSERVATION_DECK",
+              "PARKING",
+              "PODIUM",
+              "PLATFORM",
+              "PENTHOUSE",
+              "SUB_BASEMENT"
+            ]
+          },
+          "floorLevelNumber": {
+            "maxLength": 5,
+            "minLength": 0,
+            "type": "string"
+          },
+          "buildingNameLine1": {
+            "maxLength": 30,
+            "minLength": 0,
+            "type": "string"
+          },
+          "roadNumberFrom": {
+            "maxLength": 5,
+            "minLength": 0,
+            "pattern": "^[0-9]{1,5}[a-zA-Z]?$",
+            "type": "string"
+          },
+          "roadNumberTo": {
+            "maxLength": 5,
+            "minLength": 0,
+            "pattern": "^[0-9]{1,5}[a-zA-Z]?$",
+            "type": "string"
+          },
+          "roadName": { "maxLength": 30, "minLength": 0, "type": "string" },
+          "roadType": {
+            "type": "string",
+            "enum": [
+              "ACCESS",
+              "ALLEY",
+              "ALLEYWAY",
+              "AMBLE",
+              "ANCHORAGE",
+              "APPROACH",
+              "ARCADE",
+              "ARTERY",
+              "AVENUE",
+              "BANK",
+              "BASIN",
+              "BAY",
+              "BEACH",
+              "BEND",
+              "BLOCK",
+              "BLUF",
+              "BOARDWALK",
+              "BOULEVARD",
+              "BOWL",
+              "BRACE",
+              "BRAE",
+              "BREAK",
+              "BRIDGE",
+              "BROADWAY",
+              "BROW",
+              "BYPASS",
+              "BYWAY",
+              "CAUSEWAY",
+              "CENTRE",
+              "CENTREWAY",
+              "CHASE",
+              "CIRCLE",
+              "CIRCLET",
+              "CIRCUIT",
+              "CIRCUS",
+              "CLOSE",
+              "CLUSTER",
+              "COLONNADE",
+              "COMMON",
+              "CONCOURSE",
+              "COPSE",
+              "CORNER",
+              "CORSO",
+              "COURSE",
+              "COURT",
+              "COURTYARD",
+              "COVE",
+              "CREEK",
+              "CRESCENT",
+              "CREST",
+              "CROSS",
+              "CROSSING",
+              "CROSSROAD",
+              "CROSSWAY",
+              "CRUISEWAY",
+              "CUL_DE_SAC",
+              "CUTTING",
+              "CDS",
+              "DALE",
+              "DELL",
+              "DEVIATION",
+              "DIP",
+              "DISTRIBUTOR",
+              "DOWNS",
+              "DRIVE",
+              "DRIVEWAY",
+              "EDGE",
+              "ELBOW",
+              "END",
+              "ENTRANCE",
+              "ESPLANADE",
+              "ESTATE",
+              "EXPRESSWAY",
+              "EXTENSION",
+              "FAIRWAY",
+              "FIRETRACK",
+              "FIRETRAIL",
+              "FLAT",
+              "FOLLOW",
+              "FOOTWAY",
+              "FORESHORE",
+              "FORMATION",
+              "FREEWAY",
+              "FRONT",
+              "FRONTAGE",
+              "GAP",
+              "GARDEN",
+              "GARDENS",
+              "GATE",
+              "GATES",
+              "GATEWAY",
+              "GLADE",
+              "GLEN",
+              "GRANGE",
+              "GREEN",
+              "GROUND",
+              "GROVE",
+              "GULLY",
+              "HAVEN",
+              "HEATH",
+              "HEIGHTS",
+              "HIGHROAD",
+              "HIGHWAY",
+              "HILL",
+              "HUB",
+              "INTERCHANGE",
+              "INTERSECTION",
+              "ISLAND",
+              "JUNCTION",
+              "KEY",
+              "LANDING",
+              "LANE",
+              "LANEWAY",
+              "LEES",
+              "LINE",
+              "LINK",
+              "LITTLE",
+              "LOOKOUT",
+              "LOOP",
+              "LOWER",
+              "MALL",
+              "MEADOW",
+              "MEANDER",
+              "MEW",
+              "MEWS",
+              "MOTORWAY",
+              "MOUNT",
+              "NOOK",
+              "OUTLET",
+              "OUTLOOK",
+              "OVAL",
+              "OTLK",
+              "PARADE",
+              "PARK",
+              "PARKLANDS",
+              "PARKLAND",
+              "PARKWAY",
+              "PART",
+              "PASS",
+              "PASSAGE",
+              "PATH",
+              "PATHWAY",
+              "PIAZZA",
+              "PIER",
+              "PLACE",
+              "PLATEAU",
+              "PLAZA",
+              "POCKET",
+              "POINT",
+              "PORT",
+              "PROM",
+              "PROMENADE",
+              "PURSUIT",
+              "PKWY",
+              "PRRS",
+              "QUAD",
+              "QUADRANGLE",
+              "QUADRANT",
+              "QUAY",
+              "QUAYS",
+              "RAMBLE",
+              "RAMP",
+              "RANGE",
+              "REACH",
+              "RESERVE",
+              "REST",
+              "RETREAT",
+              "RETURN",
+              "RIDE",
+              "RIDGE",
+              "RIDGEWAY",
+              "RIGHT_OF_WAY",
+              "RING",
+              "RISE",
+              "RISING",
+              "RIVER",
+              "RIVERWAY",
+              "RIVIERA",
+              "ROAD",
+              "ROADS",
+              "ROADSIDE",
+              "ROADWAY",
+              "RONDE",
+              "ROSEBOWL",
+              "ROTARY",
+              "ROUND",
+              "ROUTE",
+              "ROW",
+              "RUE",
+              "RUN",
+              "ROWY",
+              "RVRA",
+              "SERVICEWAY",
+              "SIDING",
+              "SLOPE",
+              "SOUND",
+              "SPUR",
+              "SQUARE",
+              "STAIRS",
+              "STATE_HIGHWAY",
+              "STEPS",
+              "STRAIGHT",
+              "STRAND",
+              "STREET",
+              "STRIP",
+              "SUBWAY",
+              "TARN",
+              "TERRACE",
+              "THOROUGHFARE",
+              "THROUGHWAY",
+              "TOLLWAY",
+              "TOP",
+              "TOR",
+              "TOWERS",
+              "TRACK",
+              "TRAIL",
+              "TRAILER",
+              "TRIANGLE",
+              "TRUNKWAY",
+              "TURN",
+              "UNDERPASS",
+              "UPPER",
+              "VALE",
+              "VALLEY",
+              "VIADUCT",
+              "VIEW",
+              "VIEWS",
+              "VILLAGE",
+              "VILLAS",
+              "VISTA",
+              "WADE",
+              "WALK",
+              "WALKWAY",
+              "WATERS",
+              "WATERWAY",
+              "WAY",
+              "WHARF",
+              "WTRS",
+              "WYND",
+              "YARD"
+            ]
+          },
+          "streetSuffixType": {
+            "type": "string",
+            "enum": [
+              "EAST",
+              "SOUTH",
+              "NORTHEAST",
+              "WEST",
+              "NORTH",
+              "UPPER",
+              "LOWER",
+              "SOUTHWEST",
+              "EXTENSION",
+              "SOUTHEAST",
+              "CENTRAL",
+              "NORTHWEST"
+            ]
+          },
+          "postalDeliveryType": {
+            "type": "string",
+            "enum": [
+              "CARE_OF_POST_OFFICE",
+              "COMMUNITY_MAIL_AGENT",
+              "COMMUNITY_MAIL_BAG",
+              "CORNER_OF_STREET",
+              "DOCUMENT_EXCHANGE",
+              "GENERAL_POST_OFFICE_BOX",
+              "LOCKED_MAIL_BAG_SERVICE",
+              "MAIL_SERVICE",
+              "POST_OFFICE_BOX",
+              "PRIVATE_MAIL_BAG_SERVICE",
+              "ROADSIDE_DELIVERY",
+              "ROADSIDE_MAILBOX_BAG",
+              "ROADSIDE_MAIL_SERVICE",
+              "RURAL_BOX_BAG_NUMBER"
+            ]
+          },
+          "deliveryPrefix": {
+            "maxLength": 3,
+            "minLength": 0,
+            "type": "string"
+          },
+          "deliveryNumber": {
+            "maxLength": 5,
+            "minLength": 0,
+            "type": "string"
+          },
+          "deliverySuffix": {
+            "maxLength": 3,
+            "minLength": 0,
+            "type": "string"
+          },
+          "localityName": { "maxLength": 46, "minLength": 0, "type": "string" },
+          "postcode": {
+            "maxLength": 4,
+            "minLength": 0,
+            "pattern": "[0-9]{4}",
+            "type": "string"
+          },
+          "stateTerritoryCode": {
+            "type": "string",
+            "enum": ["VIC", "NSW", "QLD", "SA", "WA", "NT", "TAS", "ACT"]
+          },
+          "overseasLine1": {
+            "maxLength": 40,
+            "minLength": 0,
+            "type": "string"
+          },
+          "overseasLine2": {
+            "maxLength": 40,
+            "minLength": 0,
+            "type": "string"
+          },
+          "overseasLine3": {
+            "maxLength": 40,
+            "minLength": 0,
+            "type": "string"
+          },
+          "country": {
+            "type": "string",
+            "enum": [
+              "AFGHANISTAN",
+              "ALAND_ISLANDS",
+              "ALBANIA",
+              "ALGERIA",
+              "AMERICAN_SAMOA",
+              "ANDORRA",
+              "ANGOLA",
+              "ANGUILLA",
+              "ANTARCTICA",
+              "ANTIGUA_AND_BARBUDA",
+              "ARGENTINA",
+              "ARMENIA",
+              "ARUBA",
+              "AUSTRALIA",
+              "AUSTRIA",
+              "AZERBAIJAN",
+              "BAHAMAS",
+              "BAHRAIN",
+              "BANGLADESH",
+              "BARBADOS",
+              "BELARUS",
+              "BELGIUM",
+              "BELIZE",
+              "BENIN",
+              "BERMUDA",
+              "BHUTAN",
+              "BOLIVIA",
+              "BONAIRE_SINT_EUSTATIUS_AND_SABA",
+              "BOSNIA_AND_HERZEGOVINA",
+              "BOTSWANA",
+              "BOUVET_ISLAND",
+              "BRAZIL",
+              "BRITISH_INDIAN_OCEAN_TERRITORY",
+              "BRUNEI_DARUSSALAM",
+              "BULGARIA",
+              "BURKINA_FASO",
+              "BURUNDI",
+              "CAMBODIA",
+              "CAMEROON",
+              "CANADA",
+              "CAPE_VERDE",
+              "CAYMAN_ISLANDS",
+              "CENTRAL_AFRICAN_REPUBLIC",
+              "CHAD",
+              "CHILE",
+              "CHINA",
+              "CHRISTMAS_ISLAND",
+              "COCOS_KEELING_ISLANDS",
+              "COLOMBIA",
+              "COMOROS",
+              "CONGO",
+              "CONGO_THE_DEMOCRATIC_REPUBLIC_OF_THE",
+              "COOK_ISLANDS",
+              "COSTA_RICA",
+              "COTE_DIVOIRE",
+              "CROATIA",
+              "CUBA",
+              "CURACAO",
+              "CYPRUS",
+              "CZECH_REPUBLIC",
+              "DENMARK",
+              "DJIBOUTI",
+              "DOMINICA",
+              "DOMINICAN_REPUBLIC",
+              "ECUADOR",
+              "EGYPT",
+              "EL_SALVADOR",
+              "EQUATORIAL_GUINEA",
+              "ERITREA",
+              "ESTONIA",
+              "ETHIOPIA",
+              "FALKLAND_ISLANDS_MALVINAS",
+              "FAROE_ISLANDS",
+              "FIJI",
+              "FINLAND",
+              "FRANCE",
+              "FRENCH_GUIANA",
+              "FRENCH_POLYNESIA",
+              "FRENCH_SOUTHERN_TERRITORIES",
+              "GABON",
+              "GAMBIA",
+              "GEORGIA",
+              "GERMANY",
+              "GHANA",
+              "GIBRALTAR",
+              "GREECE",
+              "GREENLAND",
+              "GRENADA",
+              "GUADELOUPE",
+              "GUAM",
+              "GUATEMALA",
+              "GUERNSEY",
+              "GUINEA",
+              "GUINEA_BISSAU",
+              "GUYANA",
+              "HAITI",
+              "HEARD_ISLAND_AND_MCDONALD_ISLANDS",
+              "HOLY_SEE_VATICAN_CITY_STATE",
+              "HONDURAS",
+              "HONG_KONG",
+              "HUNGARY",
+              "ICELAND",
+              "INDIA",
+              "INDONESIA",
+              "IRAN_ISLAMIC_REPUBLIC_OF",
+              "IRAQ",
+              "IRELAND",
+              "ISLE_OF_MAN",
+              "ISRAEL",
+              "ITALY",
+              "JAMAICA",
+              "JAPAN",
+              "JERSEY",
+              "JORDAN",
+              "KAZAKHSTAN",
+              "KENYA",
+              "KIRIBATI",
+              "KOREA_DEMOCRATIC_PEOPLES_REPUBLIC_OF",
+              "KOREA_REPUBLIC_OF",
+              "KUWAIT",
+              "KYRGYZSTAN",
+              "LAO_PEOPLES_DEMOCRATIC_REPUBLIC",
+              "LATVIA",
+              "LEBANON",
+              "LESOTHO",
+              "LIBERIA",
+              "LIBYA",
+              "LIECHTENSTEIN",
+              "LITHUANIA",
+              "LUXEMBOURG",
+              "MACAO",
+              "MACEDONIA_THE_FORMER_YUGOSLAV_REPUBLIC_OF",
+              "MADAGASCAR",
+              "MALAWI",
+              "MALAYSIA",
+              "MALDIVES",
+              "MALI",
+              "MALTA",
+              "MARSHALL_ISLANDS",
+              "MARTINIQUE",
+              "MAURITANIA",
+              "MAURITIUS",
+              "MAYOTTE",
+              "MEXICO",
+              "MICRONESIA_FEDERATED_STATES_OF",
+              "MOLDOVA_REPUBLIC_OF",
+              "MONACO",
+              "MONGOLIA",
+              "MONTENEGRO",
+              "MONTSERRAT",
+              "MOROCCO",
+              "MOZAMBIQUE",
+              "MYANMAR",
+              "NAMIBIA",
+              "NAURU",
+              "NEPAL",
+              "NETHERLANDS",
+              "NETHERLANDS_ANTILLES",
+              "NEW_CALEDONIA",
+              "NEW_ZEALAND",
+              "NICARAGUA",
+              "NIGER",
+              "NIGERIA",
+              "NIUE",
+              "NORFOLK_ISLAND",
+              "NORTHERN_MARIANA_ISLANDS",
+              "NORWAY",
+              "OMAN",
+              "PAKISTAN",
+              "PALAU",
+              "PALESTINIAN_TERRITORY_OCCUPIED",
+              "PANAMA",
+              "PAPUA_NEW_GUINEA",
+              "PARAGUAY",
+              "PERU",
+              "PHILIPPINES",
+              "PITCAIRN",
+              "POLAND",
+              "PORTUGAL",
+              "PUERTO_RICO",
+              "QATAR",
+              "REUNION",
+              "ROMANIA",
+              "RUSSIAN_FEDERATION",
+              "RWANDA",
+              "SAINT_BARTHELEMY",
+              "SAINT_HELENA_ASCENSION_AND_TRISTAN_DA_CUNHA",
+              "SAINT_KITTS_AND_NEVIS",
+              "SAINT_LUCIA",
+              "SAINT_MARTIN_FRENCH_PART",
+              "SAINT_PIERRE_AND_MIQUELON",
+              "SAINT_VINCENT_AND_THE_GRENADINES",
+              "SAMOA",
+              "SAN_MARINO",
+              "SAO_TOME_AND_PRINCIPE",
+              "SAUDI_ARABIA",
+              "SENEGAL",
+              "SERBIA",
+              "SEYCHELLES",
+              "SIERRA_LEONE",
+              "SINGAPORE",
+              "SINT_MAARTEN_DUTCH_PART",
+              "SLOVAKIA",
+              "SLOVENIA",
+              "SOLOMON_ISLANDS",
+              "SOMALIA",
+              "SOUTH_AFRICA",
+              "SOUTH_GEORGIA_AND_THE_SOUTH_SANDWICH_ISLANDS",
+              "SOUTH_SUDAN",
+              "SPAIN",
+              "SRI_LANKA",
+              "SUDAN",
+              "SURINAME",
+              "SVALBARD_AND_JAN_MAYEN",
+              "SWAZILAND",
+              "SWEDEN",
+              "SWITZERLAND",
+              "SYRIAN_ARAB_REPUBLIC",
+              "TAIWAN_REPUBLIC_OF_CHINA",
+              "TAJIKISTAN",
+              "TANZANIA_UNITED_REPUBLIC_OF",
+              "THAILAND",
+              "TIMOR_LESTE",
+              "TOGO",
+              "TOKELAU",
+              "TONGA",
+              "TRINIDAD_AND_TOBAGO",
+              "TUNISIA",
+              "TURKEY",
+              "TURKMENISTAN",
+              "TURKS_AND_CAICOS_ISLANDS",
+              "TUVALU",
+              "UGANDA",
+              "UKRAINE",
+              "UNITED_ARAB_EMIRATES",
+              "UNITED_KINGDOM",
+              "UNITED_STATES",
+              "UNITED_STATES_MINOR_OUTLYING_ISLANDS",
+              "URUGUAY",
+              "UZBEKISTAN",
+              "VANUATU",
+              "VENEZUELA_BOLIVARIAN_REPUBLIC_OF",
+              "VIET_NAM",
+              "VIRGIN_ISLANDS_BRITISH",
+              "VIRGIN_ISLANDS_U_S_",
+              "WALLIS_AND_FUTUNA",
+              "WESTERN_SAHARA",
+              "YEMEN",
+              "ZAMBIA",
+              "ZIMBABWE"
+            ]
+          }
+        }
+      },
+      "ConsiderationAndValue": {
+        "required": [
+          "consideration",
+          "marketValueDiffersFromMonetCons",
+          "nonMonetaryConsiderationGiven"
+        ],
+        "type": "object",
+        "properties": {
+          "marketValueDiffersFromMonetCons": { "type": "boolean" },
+          "marketValueDate": { "type": "string", "format": "date" },
+          "marketValue": {
+            "maximum": 9999999999999999,
+            "exclusiveMaximum": false,
+            "minimum": 0.0,
+            "exclusiveMinimum": false,
+            "type": "number"
+          },
+          "consideration": {
+            "maximum": 9999999999999999,
+            "exclusiveMaximum": false,
+            "minimum": 0.0,
+            "exclusiveMinimum": false,
+            "type": "number"
+          },
+          "nonMonetaryConsiderationGiven": { "type": "boolean" },
+          "nonMonetaryConsiderationType": {
+            "type": "string",
+            "enum": [
+              "DeviseInAccordanceWithAWill",
+              "IntestateEstate",
+              "EntitledInEquity",
+              "BreakdownOfMarriageDeFactoRelationship",
+              "ChangeInTheMannerOfHolding",
+              "NaturalLoveAndAffection",
+              "Other"
+            ]
+          },
+          "depositPaidPercent": {
+            "maximum": 100,
+            "exclusiveMaximum": false,
+            "minimum": 0.0,
+            "exclusiveMinimum": false,
+            "type": "number"
+          },
+          "depositPaidAmount": {
+            "maximum": 9999999999999999,
+            "exclusiveMaximum": false,
+            "minimum": 0.0,
+            "exclusiveMinimum": false,
+            "type": "number"
+          },
+          "rebateDiscountAppliedByTransferorAmount": {
+            "maximum": 9999999999999999,
+            "exclusiveMaximum": false,
+            "minimum": 0.0,
+            "exclusiveMinimum": false,
+            "type": "number"
+          }
+        }
+      },
+      "ContactDetails": {
+        "type": "object",
+        "properties": {
+          "country": { "maxLength": 5, "minLength": 0, "type": "string" },
+          "areaCode": { "maxLength": 2, "minLength": 0, "type": "string" },
+          "telephoneNumber": {
+            "maxLength": 20,
+            "minLength": 0,
+            "type": "string"
+          }
+        }
+      },
+      "FormViewData": {
+        "required": [
+          "propertySection",
+          "representative",
+          "transaction",
+          "transferorSection"
+        ],
+        "type": "object",
+        "properties": {
+          "representative": { "$ref": "#/components/schemas/Representative" },
+          "propertySection": { "$ref": "#/components/schemas/PropertySection" },
+          "transaction": { "$ref": "#/components/schemas/Transaction" },
+          "transferorSection": {
+            "$ref": "#/components/schemas/TransferorSection"
+          },
+          "transfereeSection": {
+            "$ref": "#/components/schemas/TransfereeSection"
+          },
+          "additionalLandNotIncludedInContract": {
+            "$ref": "#/components/schemas/AdditionalLandNotIncludedInContract"
+          },
+          "offThePlan": { "$ref": "#/components/schemas/OffThePlan" }
+        }
+      },
+      "Gst": {
+        "required": ["considerationIncludesGst"],
+        "type": "object",
+        "properties": {
+          "considerationIncludesGst": { "type": "boolean" },
+          "transferorMakesTaxableSupplyForGst": { "type": "boolean" },
+          "explainDoesNotMakeTaxableSupply": {
+            "maxLength": 1000,
+            "minLength": 0,
+            "type": "string"
+          },
+          "gstExclusivePrice": {
+            "maximum": 9999999999999999,
+            "exclusiveMaximum": false,
+            "minimum": 0.0,
+            "exclusiveMinimum": false,
+            "type": "number"
+          },
+          "amountOfGst": {
+            "maximum": 9999999999999999,
+            "exclusiveMaximum": false,
+            "minimum": 0.0,
+            "exclusiveMinimum": false,
+            "type": "number"
+          }
+        }
+      },
+      "LandIdentifier": {
+        "required": ["landIdentifierType"],
+        "type": "object",
+        "properties": {
+          "landIdentifierType": {
+            "type": "string",
+            "description": "Land identification type",
+            "example": "VOLUME_FOLIO",
+            "enum": [
+              "VOLUME_FOLIO",
+              "LOT_PLAN",
+              "BOOK_MEMORIAL",
+              "CROWN_ALLOTMENT"
+            ]
+          },
+          "lot": { "maxLength": 10, "minLength": 0, "type": "string" },
+          "plan": { "maxLength": 9, "minLength": 0, "type": "string" },
+          "volume": { "maxLength": 5, "minLength": 0, "type": "string" },
+          "folio": { "maxLength": 4, "minLength": 0, "type": "string" }
+        }
+      },
+      "NaturalPerson": {
+        "required": ["dateOfBirth", "emailAddress", "foreignNaturalPerson"],
+        "type": "object",
+        "properties": {
+          "personName": { "$ref": "#/components/schemas/PersonName" },
+          "dateOfBirth": { "type": "string", "format": "date" },
+          "mobileNumber": { "maxLength": 20, "minLength": 0, "type": "string" },
+          "emailAddress": { "type": "string", "format": "email" },
+          "abn": {
+            "maxLength": 11,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "foreignNaturalPerson": { "type": "boolean" }
+        }
+      },
+      "OffThePlan": {
+        "required": ["offThePlanConcessionSubjected"],
+        "type": "object",
+        "properties": {
+          "offThePlanConcessionSubjected": { "type": "boolean" },
+          "deductionType": {
+            "type": "string",
+            "enum": ["LandAndBuildingPackage", "Refurbishment"]
+          },
+          "offThePlanMethod": {
+            "$ref": "#/components/schemas/OffThePlanMethod"
+          },
+          "method": {
+            "type": "string",
+            "enum": ["FIXED_45", "FIXED_60", "FIXED_75", "ALTERNATIVE"]
+          }
+        }
+      },
+      "OffThePlanMethod": {
+        "type": "object",
+        "properties": {
+          "afterContractConstructionCompletedPercent": {
+            "maximum": 100,
+            "exclusiveMaximum": false,
+            "minimum": 0,
+            "exclusiveMinimum": false,
+            "type": "number"
+          },
+          "baseLandValue": {
+            "maximum": 9999999999,
+            "exclusiveMaximum": false,
+            "minimum": 0,
+            "exclusiveMinimum": false,
+            "type": "number"
+          },
+          "infrastructureValuePercent": {
+            "maximum": 100,
+            "exclusiveMaximum": false,
+            "minimum": 0,
+            "exclusiveMinimum": false,
+            "type": "number"
+          },
+          "nonDeductibleCost": {
+            "maximum": 9999999999,
+            "exclusiveMaximum": false,
+            "minimum": 0,
+            "exclusiveMinimum": false,
+            "type": "number"
+          }
+        }
+      },
+      "Organisation": {
+        "required": [
+          "authorisedPersonEmail",
+          "authorisedPersonName",
+          "foreignOrganisationInd",
+          "organisationName"
+        ],
+        "type": "object",
+        "properties": {
+          "organisationName": {
+            "maxLength": 120,
+            "minLength": 0,
+            "type": "string"
+          },
+          "foreignOrganisationInd": { "type": "boolean" },
+          "acnArbnAbn": { "maxLength": 11, "minLength": 0, "type": "string" },
+          "authorisedPersonName": {
+            "maxLength": 40,
+            "minLength": 0,
+            "type": "string"
+          },
+          "authorisedPersonEmail": {
+            "maxLength": 60,
+            "minLength": 0,
+            "type": "string"
+          },
+          "position": {
+            "type": "string",
+            "enum": [
+              "DIRECTOR",
+              "SECRETARY",
+              "CHAIRMAN",
+              "CEO",
+              "CFO",
+              "CIO",
+              "COMMISSIONER",
+              "MANAGER",
+              "PARTNER",
+              "PRESIDENT_OR_VICE_PRESIDENT"
+            ]
+          }
+        }
+      },
+      "OwnershipShare": {
+        "required": ["sharesOwned", "totalShares"],
+        "type": "object",
+        "properties": {
+          "totalShares": {
+            "maximum": 99999999,
+            "minimum": 1,
+            "type": "integer",
+            "format": "int64"
+          },
+          "sharesOwned": {
+            "maximum": 99999999,
+            "minimum": 1,
+            "type": "integer",
+            "format": "int64"
+          }
+        }
+      },
+      "PersonName": {
+        "required": ["firstName"],
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string",
+            "nullable": true,
+            "enum": [
+              "MS",
+              "MR",
+              "MRS",
+              "MISS",
+              "DR",
+              "ABBOT",
+              "AB",
+              "ADML",
+              "ACM",
+              "AIRCDRE",
+              "AM",
+              "AVM",
+              "AC",
+              "ACW",
+              "ALD",
+              "AMBSR",
+              "ARCHBISHOP",
+              "ARCHDEACON",
+              "ASSOC_PROF",
+              "BARON",
+              "BARONESS",
+              "BISHOP",
+              "BDR",
+              "BRIG",
+              "BR",
+              "CDT",
+              "CANON",
+              "CAPT",
+              "CARDNL",
+              "CHAP",
+              "CPO",
+              "COL",
+              "CMDR",
+              "CMM",
+              "CDRE",
+              "CONST",
+              "CONSUL",
+              "CPL",
+              "COUNT",
+              "COUNTESS",
+              "DAME",
+              "DEACON",
+              "DEACONESS",
+              "DEAN",
+              "DEPUTY_SUPT",
+              "DIRECTOR",
+              "EARL",
+              "ENGR",
+              "FR",
+              "FLTLT",
+              "FSGT",
+              "FLGOFF",
+              "GEN",
+              "GOV",
+              "GP_CAPT",
+              "HON",
+              "JUDGE",
+              "JUSTICE",
+              "LADY",
+              "LBDR",
+              "LCPL",
+              "LAC",
+              "LACW",
+              "LS",
+              "LT",
+              "LEUT",
+              "LTCOL",
+              "LTCDR",
+              "LTGEN",
+              "LTGOV",
+              "LORD",
+              "MADAM",
+              "MADAME",
+              "MAJ",
+              "MAJGEN",
+              "MGR",
+              "MSTR",
+              "MAYOR",
+              "MAYORESS",
+              "MIDN",
+              "MON",
+              "MOST_REV",
+              "MTHR",
+              "NURSE",
+              "OCDT",
+              "PASTOR",
+              "PO",
+              "PLTOFF",
+              "PTE",
+              "PROF",
+              "RABBI",
+              "RADM",
+              "RECTOR",
+              "RSM_A",
+              "REV",
+              "RTHON",
+              "RT_REV",
+              "SMN",
+              "SECOND_LT",
+              "SEN",
+              "SNR",
+              "SGT",
+              "SIR",
+              "SR",
+              "SISTER_SUP",
+              "SQNLDR",
+              "SCDT",
+              "SSGT",
+              "SM",
+              "SBLT",
+              "SUPT",
+              "SWAMI",
+              "VADM",
+              "VCE_CMNDR",
+              "VISCOUNT",
+              "WOFF",
+              "WO",
+              "WO1",
+              "WO2",
+              "WOFF_AF",
+              "WO_N",
+              "WCDR"
+            ]
+          },
+          "firstName": { "maxLength": 40, "minLength": 0, "type": "string" },
+          "middleName": {
+            "maxLength": 4000,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "surname": {
+            "maxLength": 40,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "previousName": {
+            "maxLength": 30,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "Property": {
+        "required": ["landIdentifierList", "propertyAddress", "propertyType"],
+        "type": "object",
+        "properties": {
+          "propertyAddress": { "$ref": "#/components/schemas/Address" },
+          "marketValue": {
+            "maximum": 9999999999999999,
+            "exclusiveMaximum": false,
+            "minimum": 0.0,
+            "exclusiveMinimum": false,
+            "type": "number"
+          },
+          "area": {
+            "maximum": 9999999999999999,
+            "exclusiveMaximum": false,
+            "minimum": 0.0,
+            "exclusiveMinimum": false,
+            "type": "number"
+          },
+          "propertyType": {
+            "type": "string",
+            "description": "Type of property",
+            "enum": [
+              "ResidentialPrivateDwelling",
+              "ResidentialVacantLand",
+              "CommercialRetailPremises",
+              "CommercialVacantLand",
+              "ResidentialAndCommercialMixedUse",
+              "IndustrialWithBuilding",
+              "IndustrialVacantLand",
+              "PrimaryProductionWithBuildingImplementsStockOrWaterEntitlements",
+              "PrimaryProductionVacantLandWithNoImplementsStockOrWaterEntitlements",
+              "AnyPropertyTypeWithWaterEntitlements"
+            ]
+          },
+          "homeEstablishmentType": {
+            "type": "string",
+            "enum": ["NEW_HOME", "ESTABLISHED_HOME", "VACANT_LAND"]
+          },
+          "landIdentifierList": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/LandIdentifier" }
+          }
+        }
+      },
+      "PropertySection": {
+        "required": ["percentInterestTransferred", "propertyList"],
+        "type": "object",
+        "properties": {
+          "percentInterestTransferred": {
+            "maximum": 100,
+            "minimum": 0,
+            "type": "number",
+            "description": "Interest in the property being transferred",
+            "example": 50
+          },
+          "propertyList": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/Property" }
+          }
+        }
+      },
+      "RelatedParty": {
+        "required": ["relatedParty"],
+        "type": "object",
+        "properties": {
+          "relatedParty": { "type": "boolean" },
+          "relationshipType": {
+            "type": "string",
+            "description": "Party relationship type",
+            "nullable": true,
+            "enum": [
+              "BloodRelatives",
+              "LegalRelatives",
+              "Spouses",
+              "DomesticPartners",
+              "ParentChild",
+              "GrandparentGrandchild",
+              "Siblings",
+              "AuntUncleNieceNephew",
+              "Cousins",
+              "AdoptedOrStepChildrenAndTheirParents",
+              "DomesticRelationshipOrFriends",
+              "BusinessRelationships",
+              "SpouseAndThirdParty",
+              "DomesticPartnerAndThirdParty",
+              "FormerSpouse",
+              "FormerDomesticPartner",
+              "FormerSpouseAndThirdParty",
+              "FormerDomesticPartnerAndThirdParty"
+            ]
+          }
+        }
+      },
+      "Representative": {
+        "required": ["representativeRole"],
+        "type": "object",
+        "properties": {
+          "dutiesFormClientReference": {
+            "maxLength": 30,
+            "minLength": 0,
+            "type": "string",
+            "description": "Client reference for Duties Form",
+            "example": "15"
+          },
+          "representativeRole": {
+            "type": "string",
+            "description": "Representative Role",
+            "enum": ["TRANSFEROR", "TRANSFEREE", "BOTH"]
+          },
+          "acknowledged": { "type": "boolean" }
+        }
+      },
+      "SaleOfBusinessGoods": {
+        "required": ["saleOfBusiness", "saleOfGoods"],
+        "type": "object",
+        "properties": {
+          "saleOfBusiness": { "type": "boolean" },
+          "considerationValueAttributableToGoodwill": {
+            "maximum": 9999999999999999,
+            "exclusiveMaximum": false,
+            "minimum": 0.0,
+            "exclusiveMinimum": false,
+            "type": "number"
+          },
+          "saleOfGoods": { "type": "boolean" },
+          "goodsPlantAndEquipmentOther": {
+            "maximum": 9999999999999999,
+            "exclusiveMaximum": false,
+            "minimum": 0.0,
+            "exclusiveMinimum": false,
+            "type": "number"
+          },
+          "goodwillOther": {
+            "maximum": 9999999999999999,
+            "exclusiveMaximum": false,
+            "minimum": 0.0,
+            "exclusiveMinimum": false,
+            "type": "number"
+          },
+          "additionalSaleOfGoodContractDate": {
+            "type": "string",
+            "format": "date"
+          },
+          "purchaserAdditionalContractName": {
+            "maxLength": 100,
+            "minLength": 0,
+            "type": "string"
+          },
+          "purchaserAdditionalContractAbnAcn": {
+            "maxLength": 11,
+            "minLength": 0,
+            "type": "string"
+          },
+          "purchaserInAdditionalContractRelatedToTransferees": {
+            "type": "boolean"
+          },
+          "originalContractAndAdditionalContractConditional": {
+            "type": "boolean"
+          }
+        }
+      },
+      "Transaction": {
+        "required": ["transferOfLandType"],
+        "type": "object",
+        "properties": {
+          "transferOfLandType": {
+            "type": "string",
+            "description": "Type of land transfer",
+            "enum": [
+              "TRANSFER_OF_LAND",
+              "CHANGE_OF_BENEFICIAL_OWNERSHIP",
+              "LAND_USE_ENTITLEMENT"
+            ]
+          },
+          "transferDetails": { "$ref": "#/components/schemas/TransferDetails" },
+          "relatedParty": { "$ref": "#/components/schemas/RelatedParty" },
+          "considerationAndValue": {
+            "$ref": "#/components/schemas/ConsiderationAndValue"
+          },
+          "gst": { "$ref": "#/components/schemas/Gst" },
+          "saleOfBusinessGoods": {
+            "$ref": "#/components/schemas/SaleOfBusinessGoods"
+          },
+          "waterRights": { "$ref": "#/components/schemas/WaterRights" },
+          "marketValueDiffersFromMonetaryConsideration": { "type": "boolean" },
+          "marketValueQuestionRendered": { "type": "boolean" },
+          "marketValueDetailsRendered": { "type": "boolean" },
+          "maxTransactionConsiderationMarketValue": { "type": "number" },
+          "renderTransfereePropertyHomeTypeMarketValue": { "type": "boolean" }
+        }
+      },
+      "TransferDetails": {
+        "required": ["transactionType"],
+        "type": "object",
+        "properties": {
+          "transactionType": {
+            "type": "string",
+            "enum": [
+              "TransferBetweenSpousesDeFactoOrDomesticPartners",
+              "ChangeInTheMannerOfHolding",
+              "DeviseInAccordanceWithAWillOrProbate",
+              "Other"
+            ]
+          },
+          "transactionInvolvesMonetaryConsideration": { "type": "boolean" },
+          "transferInvolvesContract": { "type": "boolean" },
+          "contractDate": {
+            "type": "string",
+            "format": "date",
+            "nullable": true
+          },
+          "settlementDate": { "type": "string", "format": "date" },
+          "transferDate": { "type": "string", "format": "date" },
+          "optionGrantedInRelationToProperty": { "type": "boolean" },
+          "optionDate": { "type": "string", "format": "date" }
+        }
+      },
+      "Transferee": {
+        "required": ["behalfOfTrust", "currentAddress", "partyType"],
+        "type": "object",
+        "properties": {
+          "partyType": {
+            "type": "string",
+            "description": "Party type. Based on the party type populate either naturalPerson or organisation",
+            "enum": [
+              "INDIVIDUAL_NATURAL_PERSON",
+              "INDIVIDUAL_OTHER",
+              "COMPANY",
+              "ORGANISATION",
+              "ASSOCIATION"
+            ]
+          },
+          "naturalPerson": { "$ref": "#/components/schemas/NaturalPerson" },
+          "organisation": { "$ref": "#/components/schemas/Organisation" },
+          "partyAddress": { "$ref": "#/components/schemas/Address" },
+          "contactDetails": { "$ref": "#/components/schemas/ContactDetails" },
+          "interestHolding": { "$ref": "#/components/schemas/OwnershipShare" },
+          "behalfOfTrust": { "type": "boolean" },
+          "currentAddress": { "$ref": "#/components/schemas/Address" },
+          "sameAddress": { "type": "boolean" },
+          "remainingOnTitle": { "type": "boolean" },
+          "trust": { "$ref": "#/components/schemas/TransfereeTrust" },
+          "transferRightsShare": {
+            "$ref": "#/components/schemas/OwnershipShare"
+          },
+          "occupyAsPPR": { "type": "boolean" },
+          "dateOfOccupation": { "type": "string", "format": "date-time" },
+          "propertyId": { "type": "integer", "format": "int64" }
+        }
+      },
+      "TransfereeSection": {
+        "type": "object",
+        "properties": {
+          "transfereeList": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/Transferee" }
+          }
+        }
+      },
+      "TransfereeTrust": {
+        "required": ["foreignTrust", "trustName", "trustType"],
+        "type": "object",
+        "properties": {
+          "trustName": { "maxLength": 200, "minLength": 0, "type": "string" },
+          "foreignTrust": { "type": "boolean" },
+          "trustType": {
+            "type": "string",
+            "enum": [
+              "FIXED",
+              "UNIT",
+              "DISCRETIONARY",
+              "SELF_MANAGED_SUPERANNUATION_FUND",
+              "SUPERANNUATION_FUND",
+              "PUBLIC_UNIT_TRUST",
+              "WHOLESALE_UNIT_TRUST",
+              "OTHER"
+            ]
+          },
+          "beneficiaryList": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/TransfereeTrustBeneficiary"
+            }
+          }
+        }
+      },
+      "TransfereeTrustBeneficiary": {
+        "type": "object",
+        "properties": {
+          "beneficiaryType": {
+            "type": "string",
+            "enum": [
+              "INDIVIDUAL_NATURAL_PERSON",
+              "INDIVIDUAL_OTHER",
+              "COMPANY",
+              "ORGANISATION",
+              "ASSOCIATION"
+            ]
+          },
+          "beneficiaryName": { "$ref": "#/components/schemas/PersonName" },
+          "abn": { "maxLength": 11, "minLength": 0, "type": "string" },
+          "organisationName": {
+            "maxLength": 120,
+            "minLength": 0,
+            "type": "string"
+          },
+          "transferee": { "$ref": "#/components/schemas/Transferee" }
+        }
+      },
+      "Transferor": {
+        "required": [
+          "behalfOfTrust",
+          "currentAddress",
+          "partyType",
+          "remainingOnTitle"
+        ],
+        "type": "object",
+        "properties": {
+          "partyType": {
+            "type": "string",
+            "description": "Party type. Based on the party type populate either naturalPerson or organisation",
+            "enum": [
+              "INDIVIDUAL_NATURAL_PERSON",
+              "INDIVIDUAL_OTHER",
+              "COMPANY",
+              "ORGANISATION",
+              "ASSOCIATION"
+            ]
+          },
+          "naturalPerson": { "$ref": "#/components/schemas/NaturalPerson" },
+          "organisation": { "$ref": "#/components/schemas/Organisation" },
+          "partyAddress": { "$ref": "#/components/schemas/Address" },
+          "contactDetails": { "$ref": "#/components/schemas/ContactDetails" },
+          "interestHolding": { "$ref": "#/components/schemas/OwnershipShare" },
+          "behalfOfTrust": { "type": "boolean" },
+          "currentAddress": { "$ref": "#/components/schemas/Address" },
+          "sameAddress": { "type": "boolean" },
+          "remainingOnTitle": { "type": "boolean" },
+          "trust": { "$ref": "#/components/schemas/TransferorTrust" }
+        }
+      },
+      "TransferorSection": {
+        "required": ["transferorList"],
+        "type": "object",
+        "properties": {
+          "transferorList": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/Transferor" }
+          }
+        }
+      },
+      "TransferorTrust": {
+        "required": ["foreignTrust", "trustName"],
+        "type": "object",
+        "properties": {
+          "trustName": { "maxLength": 200, "minLength": 0, "type": "string" },
+          "foreignTrust": { "type": "boolean" },
+          "trustType": {
+            "type": "string",
+            "enum": [
+              "FIXED",
+              "UNIT",
+              "DISCRETIONARY",
+              "SELF_MANAGED_SUPERANNUATION_FUND",
+              "SUPERANNUATION_FUND",
+              "PUBLIC_UNIT_TRUST",
+              "WHOLESALE_UNIT_TRUST",
+              "OTHER"
+            ]
+          },
+          "beneficiaryList": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/TransferorTrustBeneficiary"
+            }
+          }
+        }
+      },
+      "TransferorTrustBeneficiary": {
+        "type": "object",
+        "properties": {
+          "beneficiaryType": {
+            "type": "string",
+            "enum": [
+              "INDIVIDUAL_NATURAL_PERSON",
+              "INDIVIDUAL_OTHER",
+              "COMPANY",
+              "ORGANISATION",
+              "ASSOCIATION"
+            ]
+          },
+          "beneficiaryName": { "$ref": "#/components/schemas/PersonName" },
+          "abn": { "maxLength": 11, "minLength": 0, "type": "string" },
+          "organisationName": {
+            "maxLength": 120,
+            "minLength": 0,
+            "type": "string"
+          },
+          "transferor": { "$ref": "#/components/schemas/Transferor" }
+        }
+      },
+      "WaterRights": {
+        "required": ["saleOfWaterRights"],
+        "type": "object",
+        "properties": {
+          "saleOfWaterRights": { "type": "boolean" },
+          "considerationForWaterRights": {
+            "maximum": 9999999999999999,
+            "exclusiveMaximum": false,
+            "minimum": 0.0,
+            "exclusiveMinimum": false,
+            "type": "number"
+          }
+        }
+      },
+      "ApiError": {
+        "type": "object",
+        "properties": {
+          "status": { "type": "string" },
+          "message": { "type": "string", "nullable": true },
+          "errors": {
+            "type": "array",
+            "nullable": true,
+            "items": { "type": "string", "nullable": true }
+          }
+        }
+      },
+      "ApiResponse": {
+        "type": "object",
+        "properties": {
+          "status": { "type": "string" },
+          "message": { "type": "string", "nullable": true },
+          "errors": {
+            "type": "array",
+            "nullable": true,
+            "items": { "type": "string", "nullable": true }
+          },
+          "dutiesFormId": { "type": "integer", "format": "int64" }
+        }
+      },
+      "FormViewUpdate": {
+        "required": ["representative"],
+        "type": "object",
+        "properties": {
+          "representative": { "$ref": "#/components/schemas/Representative" },
+          "propertySection": { "$ref": "#/components/schemas/PropertySection" },
+          "transaction": { "$ref": "#/components/schemas/Transaction" },
+          "transferorSection": {
+            "$ref": "#/components/schemas/TransferorSection"
+          },
+          "transfereeSection": {
+            "$ref": "#/components/schemas/TransfereeSection"
+          },
+          "additionalLandNotIncludedInContract": {
+            "$ref": "#/components/schemas/AdditionalLandNotIncludedInContract"
+          },
+          "offThePlan": { "$ref": "#/components/schemas/OffThePlan" }
+        }
+      }
+    }
+  }
+}

@@ -1,6 +1,6 @@
 <div align="center">
 
-  ![banner](assets/ts-js-k6.png)
+![banner](assets/ts-js-k6.png)
 
 # TypeScript with k6
 
@@ -19,11 +19,11 @@ This repository provides a scaffolding project to start using TypeScript in your
 
 ## Installation
 
-### Creating a project from the `template-typescript` template**
+### Creating a project from the `template-typescript` template\*\*
 
 To generate a TypeScript project that includes the dependencies and initial configuration, navigate to the [template-typescript](https://github.com/k6io/template-typescript) page and click **Use this template**.
 
-  ![](assets/use-this-template-button.png)
+![](assets/use-this-template-button.png)
 
 ### Install dependencies
 

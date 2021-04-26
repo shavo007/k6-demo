@@ -11,7 +11,6 @@
  * OpenAPI generator version: 5.1.1-SNAPSHOT
  */
 
-
 import http from "k6/http";
 import { group, check, sleep } from "k6";
 
@@ -21,34 +20,34 @@ const BASE_URL = "http://localhost:8090";
 const SLEEP_DURATION = 0.1;
 // Global variables should be initialized.
 
-export default function() {
-    // group("/greetings/{greetingId}", () => {
-    //     let greetingId = "TODO_EDIT_THE_GREETINGID";
-    //     let url = BASE_URL + `/greetings/${greetingId}`;
-    //     // Request No. 1
-    //     let request = http.get(url);
-    //     check(request, {
-    //         "Success": (r) => r.status === 200
-    //     });
-    //     sleep(SLEEP_DURATION);
-    // });
-    group("/greetings", () => {
-        let url = BASE_URL + `/greetings`;
-        // Request No. 1
-        let request = http.get(url);
-        check(request, {
-            "Success": (r) => r.status === 200
-        });
-        sleep(SLEEP_DURATION);
-
-        // Request No. 2
-        // TODO: edit the parameters of the request body.
-        // body = {"id": "long", "message": "string", "creationDate": "date", "label": "string", "isFriendly": "boolean", "weatherType": "weathertype", "status": "string"};
-        // params = {headers: {"Content-Type": "application/json"}};
-        // request = http.post(url, body, params);
-        // check(request, {
-        //     "Greeting created": (r) => r.status === 201
-        // });
-        // sleep(SLEEP_DURATION);
+export default function () {
+  // group("/greetings/{greetingId}", () => {
+  //     let greetingId = "TODO_EDIT_THE_GREETINGID";
+  //     let url = BASE_URL + `/greetings/${greetingId}`;
+  //     // Request No. 1
+  //     let request = http.get(url);
+  //     check(request, {
+  //         "Success": (r) => r.status === 200
+  //     });
+  //     sleep(SLEEP_DURATION);
+  // });
+  group("/greetings", () => {
+    let url = BASE_URL + `/greetings`;
+    // Request No. 1
+    let request = http.get(url);
+    check(request, {
+      Success: (r) => r.status === 200,
     });
+    sleep(SLEEP_DURATION);
+
+    // Request No. 2
+    // TODO: edit the parameters of the request body.
+    // body = {"id": "long", "message": "string", "creationDate": "date", "label": "string", "isFriendly": "boolean", "weatherType": "weathertype", "status": "string"};
+    // params = {headers: {"Content-Type": "application/json"}};
+    // request = http.post(url, body, params);
+    // check(request, {
+    //     "Greeting created": (r) => r.status === 201
+    // });
+    // sleep(SLEEP_DURATION);
+  });
 }
