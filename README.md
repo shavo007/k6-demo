@@ -1,20 +1,16 @@
-<div align="center">
-
-![banner](assets/ts-js-k6.png)
-
 # TypeScript with k6
 
 ![.github/workflows/push.yml](https://github.com/shavo007/k6-demo/workflows/.github/workflows/push.yml/badge.svg?branch=main)
 
-</div>
+![banner](assets/ts-js-k6.png)
 
-This repository provides a scaffolding project to start using TypeScript in your k6 scripts.
+This repository showcases k6 with typescript and generating boilerplate scripts from your OAS (Open API Spec). k6 recently outlined in thoughtworks [tech radar](https://www.thoughtworks.com/radar/tools?blipid=202010078) tools quadrant.
 
 ## Prerequisites
 
 - [k6](https://k6.io/docs/getting-started/installation)
 - [NodeJS](https://nodejs.org/en/download/)
-- [Yarn](https://yarnpkg.com/getting-started/install) (optional)
+- [Yarn](https://yarnpkg.com/getting-started/install)
 - [Docker](https://docs.docker.com/get-docker/)
 
 ## Installation
@@ -77,11 +73,28 @@ k6 run dist/greetings.js
 yarn html #gen html report
 ```
 
+## Load testing with influxdb and grafana
+
+```bash
+docker compose up -d #run the services in the background
+docker-compose run -v \
+    $PWD/dist:/scripts \
+    k6 run /scripts/greetings.js
+
+```
+
+Access grafana: `open http://localhost:3000`
+
+![Grafana dashboard](./assets/grafana.png)
+
 ## Resources
 
 - [k6 and oas](https://k6.io/blog/load-testing-your-api-with-swagger-openapi-and-k6/)
+- [k6 vs jmeter](https://k6.io/blog/k6-vs-jmeter/)
 
 ## TODO
 
-- add in prettify
 - raise issue on stdout chars
+- use readme.co for new readme template
+- showcase influx and grafana
+- showcase browser recorder

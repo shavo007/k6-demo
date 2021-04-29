@@ -5,3 +5,5 @@ target
 package-lock.json
 results
 k6-test
+dashboards
+grafana

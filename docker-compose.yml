@@ -1,0 +1,30 @@
+version: "3.9"
+services:
+  k6:
+    image: loadimpact/k6
+    environment:
+      - K6_OUT=influxdb=http://influxdb:8086/k6
+      # - K6_INFLUXDB_USERNAME=admin
+      # - K6_INFLUXDB_PASSWORD=admin
+    volumes:
+      - $PWD/dist:/scripts
+
+  influxdb:
+    image: influxdb:1.8
+    ports:
+      - "8086:8086"
+    environment:
+      - INFLUXDB_DB=k6
+
+  grafana:
+    image: grafana/grafana
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_AUTH_ANONYMOUS_ORG_ROLE=Admin
+      - GF_AUTH_ANONYMOUS_ENABLED=true
+      - GF_AUTH_BASIC_ENABLED=false
+    volumes:
+      - ./dashboards:/var/lib/grafana/dashboards
+      - ./grafana/dashboard.yaml:/etc/grafana/provisioning/dashboards/dashboard.yaml
+      - ./grafana/datasource.yaml:/etc/grafana/provisioning/datasources/datasource.yaml

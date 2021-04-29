@@ -36,6 +36,7 @@ module.exports = {
     new CleanWebpackPlugin(),
     new BundleAnalyzerPlugin({
       analyzerMode: "disable",
+      // analyzerMode: "static",
       generateStatsFile: "true",
     }),
   ],
