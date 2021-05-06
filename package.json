@@ -8,7 +8,9 @@
   "scripts": {
     "html": "ts-node html_report.ts",
     "bundle": "webpack",
-    "format": "prettier --write ."
+    "format": "prettier --write .",
+    "**/*": "prettier --write --ignore-unknown",
+    "prepare": "husky install"
   },
   "dependencies": {
     "@babel/core": "7.13.16",
@@ -27,10 +29,15 @@
   "devDependencies": {
     "@types/webpack-bundle-analyzer": "4.4.0",
     "clean-webpack-plugin": "4.0.0-alpha.0",
+    "husky": "^6.0.0",
     "k6-html-reporter": "1.0.3",
+    "lint-staged": "^10.5.4",
     "prettier": "2.2.1",
     "ts-node": "9.1.1",
     "webpack-bundle-analyzer": "4.4.1",
     "webpack-cli": "4.6.0"
+  },
+  "lint-staged": {
+    "*.{js,css,md}": "prettier --write"
   }
 }

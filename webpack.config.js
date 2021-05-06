@@ -10,6 +10,7 @@ module.exports = {
     test1: "./test1.ts",
     test2: "./test2.ts",
     greetings: "./greetings.ts",
+    bpay: "./bpay-api.ts",
   },
   output: {
     path: path.join(__dirname, "dist"),
