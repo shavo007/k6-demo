@@ -26,7 +26,7 @@ jobs:
         #     ${{ runner.os }}-build-${{ env.cache-name }}-
       - name: Install dependencies
         run: |
-          yarn
+          yarn install --frozen-lockfile
 
       - name: Transpile and bundle test script
         run: |

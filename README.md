@@ -139,4 +139,3 @@ Access grafana: `open http://localhost:3000` and verify connection to influxdb d
 
 - raise issue on stdout chars
 - showcase browser recorder
-- update github actions to showcase running smoke tests
