@@ -15,14 +15,15 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
       - name: Cache node modules
-        uses: actions/cache@v2
-        env:
-          cache-name: cache-node-modules
-        with:
-          path: ~/.npm
-          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-build-${{ env.cache-name }}-
+        uses: c-hive/gha-yarn-cache@v1
+        # uses: actions/cache@v2
+        # env:
+        #   cache-name: cache-node-modules
+        # with:
+        #   path: ~/.npm
+        #   key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/yarn.lock') }}
+        #   restore-keys: |
+        #     ${{ runner.os }}-build-${{ env.cache-name }}-
       - name: Install dependencies
         run: |
           yarn
@@ -35,7 +36,10 @@ jobs:
         uses: k6io/action@v0.2.0
         with:
           filename: dist/test1.js
+
       - name: Run greetings api smoke tests
-        uses: k6io/action@v0.2.0
-        with:
-          filename: dist/greetings.js
+        run: |
+           docker run -i loadimpact/k6 run - <dist/greetings.js
+        # uses: k6io/action@v0.2.0
+        # with:
+        #   filename: dist/greetings.js
