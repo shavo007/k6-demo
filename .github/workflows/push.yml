@@ -39,6 +39,7 @@ jobs:
 
       - name: Run greetings api smoke tests
         run: |
+           docker ps
            docker run -i loadimpact/k6 run - <dist/greetings.js
         # uses: k6io/action@v0.2.0
         # with:
