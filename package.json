@@ -10,7 +10,8 @@
     "bundle": "webpack",
     "format": "prettier --write .",
     "**/*": "prettier --write --ignore-unknown",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "check": "prettier --check ."
   },
   "dependencies": {
     "@babel/core": "7.13.16",
