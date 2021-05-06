@@ -4,7 +4,7 @@ import http, { Response } from "k6/http";
 import { padStart } from "lodash";
 import { textSummary } from "./helper";
 
-const BASE_URL = "http://localhost:8090";
+// const BASE_URL = "http://localhost:8090";
 // const BASE_URL = "http://host.docker.internal:8090";
 // const BASE_URL = "http://greetings:8090";
 console.log(padStart("Hello TypeScript!", 20, " "));
@@ -33,7 +33,7 @@ export let options: Options = {
 };
 
 export default () => {
-  let url = `${BASE_URL}/greetings`;
+  let url = `${__ENV.BASE_URL}/greetings`;
   const res: Response = http.get(url, {
     tags: { team: "digix", api: "greetings" },
   });

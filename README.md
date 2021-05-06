@@ -59,7 +59,7 @@ k6 run dist/test1.js
 
 > Showcase gen k6 script from OAS (Open API Spec)
 
-Generate k6s scripts via open api generator and the [oas file](oas3.yaml). Can run the CLI via the docker image.
+Generate k6s scripts via [open api generator](https://openapi-generator.tech/docs/generators/#client-generators) and the [oas file](oas3.yaml). Can run the CLI via the docker image.
 
 ```bash
 docker pull openapitools/openapi-generator-cli
@@ -72,7 +72,7 @@ docker run --rm -v ${PWD}:/local openapitools/openapi-generator-cli generate \
 
 ```
 
-This generates `scripts.js` and is a great start to help support defining your perf test cases.
+This generates [script.js](./k6-test/script.js) and is a great start to help support defining your perf test cases.
 
 **NB** It is boilerplate so will need to be refined after for re-use
 
@@ -121,7 +121,7 @@ CLIENT_ID=REDACTED CLIENT_SECRET=REDACTED k6 run dist/bpay.js
 docker compose up -d #run the services in the background
 docker-compose run -v \
     $PWD/dist:/scripts \
-    k6 run /scripts/greetings.js
+    k6 run -e BASE_URL=http://host.docker.internal:8090  /scripts/greetings.js
 
 ```
 
