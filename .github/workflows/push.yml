@@ -4,11 +4,25 @@ jobs:
   k6_transpile_bundle_test:
     name: Transpile, bundle and run
     runs-on: ubuntu-latest
+    # runs-on: self-hosted
+    services:
+      greetings:
+        image: shanelee007/greetings-api:latest
+        ports:
+          - 8090:8081
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v1
-
+        uses: actions/checkout@v2
+      - name: Cache node modules
+        uses: actions/cache@v2
+        env:
+          cache-name: cache-node-modules
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-build-${{ env.cache-name }}-
       - name: Install dependencies
         run: |
           yarn
@@ -18,6 +32,10 @@ jobs:
           yarn webpack
 
       - name: Run local k6 test
-        uses: k6io/action@v0.1
+        uses: k6io/action@v0.2.0
         with:
           filename: dist/test1.js
+      - name: Run greetings api smoke tests
+        uses: k6io/action@v0.2.0
+        with:
+          filename: dist/greetings.js

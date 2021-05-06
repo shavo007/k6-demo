@@ -7,6 +7,19 @@ This repository showcases k6 with typescript and generating boilerplate scripts 
 ![.github/workflows/push.yml](https://github.com/shavo007/k6-demo/workflows/.github/workflows/push.yml/badge.svg?branch=main)
 ![GitHub top language](https://img.shields.io/github/languages/top/shavo007/k6-demo)
 
+- [TypeScript with k6](#typescript-with-k6)
+  - [Prerequisites](#prerequisites)
+  - [Installation](#installation)
+    - [Install dependencies](#install-dependencies)
+  - [Usage/Examples](#usageexamples)
+    - [Running the test](#running-the-test)
+    - [OAS integration](#oas-integration)
+      - [Test running against the API](#test-running-against-the-api)
+    - [OAuth2 integration](#oauth2-integration)
+    - [Load testing with influxdb and grafana](#load-testing-with-influxdb-and-grafana)
+  - [Resources](#resources)
+  - [TODO](#todo)
+
 ## Prerequisites
 
 - [k6](https://k6.io/docs/getting-started/installation)
@@ -65,6 +78,15 @@ This generates `scripts.js` and is a great start to help support defining your p
 
 This auto-generation of the load test script will help streamline the API testing process, keeping on par with the latest changes to their APIs and specifications.
 
+#### Test running against the API
+
+```bash
+docker run --rm -it -p8090:8081 shanelee007/greetings-api:latest #run greetings API
+yarn webpack
+k6 run dist/greetings.js
+yarn html #generate a html report
+```
+
 ### OAuth2 integration
 
 > Showcase gen types from open api generator and k6 scripts for [bpay API](./bpay/oas3.yaml)
@@ -93,15 +115,6 @@ yarn webpack
 CLIENT_ID=REDACTED CLIENT_SECRET=REDACTED k6 run dist/bpay.js
 ```
 
-#### Test running against the API
-
-```bash
-docker run --rm -it -p8090:8081 shanelee007/greetings-api:latest #run greetings API
-yarn webpack
-k6 run dist/greetings.js
-yarn html #generate a html report
-```
-
 ### Load testing with influxdb and grafana
 
 ```bash
@@ -120,10 +133,10 @@ Access grafana: `open http://localhost:3000` and verify connection to influxdb d
 
 - [k6 and oas](https://k6.io/blog/load-testing-your-api-with-swagger-openapi-and-k6/)
 - [k6 vs jmeter](https://k6.io/blog/k6-vs-jmeter/)
+- [prettier pre-commit](https://prettier.io/docs/en/precommit.html)
 
 ## TODO
 
 - raise issue on stdout chars
 - showcase browser recorder
-- load test with oauth2 client creds
-- husky and lint-staged
+- update github actions to showcase running smoke tests
