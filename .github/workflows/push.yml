@@ -31,11 +31,7 @@ jobs:
 
       - name: Run greetings api smoke tests
         run: |
-          sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys C5AD17C747E3415A3642D57D77C6C491D6AC1D69
-          echo "deb https://dl.k6.io/deb stable main" | sudo tee /etc/apt/sources.list.d/k6.list
-          sudo apt-get update
-          sudo apt-get install k6
-          docker ps
+          curl https://github.com/k6io/k6/releases/download/v0.31.1/k6-v0.31.1-linux64.tar.gz -L | tar xvz --strip-components 1
           BASE_URL=http://localhost:8090 k6 run - <dist/greetings.js
         # uses: k6io/action@v0.2.0
         # with:
