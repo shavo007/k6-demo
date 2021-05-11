@@ -899,10 +899,10 @@
   resolved "https://registry.yarnpkg.com/@types/json-schema/-/json-schema-7.0.7.tgz#98a993516c859eb0d5c4c8f098317a9ea68db9ad"
   integrity sha512-cxWFQVseBm6O9Gbw1IWb8r6OS4OhSt3hPZLkFApLjM8TEXROBuQGLAH2i2gZpcXdLBIrpXuTDhH7Vbm1iXmNGA==
 
-"@types/k6@0.31.0":
-  version "0.31.0"
-  resolved "https://registry.yarnpkg.com/@types/k6/-/k6-0.31.0.tgz#bbdded6c5fe80819b887df72e8018f2a51170aa1"
-  integrity sha512-uSQxRgUVl5kKwdwlgg7vublsAliiugcUi7AaZXhPhMtrAUmYnUxr41X0q8tAu0FK0ovd8r4kwM6uCQvNlmzXxw==
+"@types/k6@0.31.1":
+  version "0.31.1"
+  resolved "https://registry.yarnpkg.com/@types/k6/-/k6-0.31.1.tgz#76e55d6e6c31003be0c369adb3b021c718a6a728"
+  integrity sha512-bqKVugEx/0GaBZafLheHRBfWqm15iGdJ0bwfjqSBbhDh1kwo+XWrgty8GvoR2aingf9N3c12VitUmV9Cc4vUzg==
 
 "@types/lodash@4.14.168":
   version "4.14.168"
