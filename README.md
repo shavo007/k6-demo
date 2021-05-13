@@ -72,7 +72,7 @@ docker run --rm -v ${PWD}:/local openapitools/openapi-generator-cli generate \
 
 ```
 
-This generates [script.js](./k6-test/script.js) and is a great start to help support defining your perf test cases.
+This generates [script.js](./k6-k6-oas3/script.js) and is a great start to help support defining your perf test cases.
 
 **NB** It is boilerplate so will need to be refined after for re-use
 
@@ -81,9 +81,9 @@ This auto-generation of the load test script will help streamline the API testin
 #### Test running against the API
 
 ```bash
-docker run --rm -it -p8090:8081 shanelee007/greetings-api:latest #run greetings API
+docker run -d -p8090:8081 shanelee007/greetings-api:latest #run greetings API
 yarn webpack
-k6 run dist/greetings.js
+k6 run -e BASE_URL=http://localhost:8090 dist/greetings.js
 yarn html #generate a html report
 ```
 
