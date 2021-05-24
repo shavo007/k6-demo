@@ -34,7 +34,7 @@
     "lint-staged": "11.0.0",
     "prettier": "2.3.0",
     "ts-node": "9.1.1",
-    "webpack-bundle-analyzer": "4.4.1",
+    "webpack-bundle-analyzer": "4.4.2",
     "webpack-cli": "4.7.0"
   },
   "lint-staged": {
