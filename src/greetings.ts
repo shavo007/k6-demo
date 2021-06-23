@@ -10,7 +10,7 @@ import { textSummary } from "./helper";
 console.log(padStart("Hello TypeScript!", 20, " "));
 
 export let options: Options = {
-  vus: 5, //no. of concurrent visual users
+  vus: 5, //no. of concurrent virtual users
   duration: "5s",
   discardResponseBodies: true, //discard response bodies to improve perf
   //if you want to fail the whole load test use thresholds
@@ -33,7 +33,8 @@ export let options: Options = {
 };
 
 export default () => {
-  let url = `${__ENV.BASE_URL}/greetings`;
+  let baseUrl = __ENV.BASE_URL ?? "http://localhost:8090";
+  let url = `${baseUrl}/greetings`;
   const res: Response = http.get(url, {
     tags: { team: "digix", api: "greetings" },
   });

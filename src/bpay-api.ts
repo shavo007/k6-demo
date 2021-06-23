@@ -68,9 +68,8 @@ export default function ({ access_token = "" }: { access_token: string }) {
       "Response to indicate the request was successfully processed. Note that the order of the results should not\
              be relied on to co-relate the response with the original request, rather use the \"tid\" included in the response for the co-relation. \
             Note that the response is considered a 'success' (error code 200) regardless of whether \
-            the included payments are validated successfully or not.": (
-        r
-      ) => r.status === 200,
+            the included payments are validated successfully or not.":
+        (r) => r.status === 200,
     });
     sleep(SLEEP_DURATION);
   });
