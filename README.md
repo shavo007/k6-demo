@@ -72,7 +72,7 @@ docker run --rm -v ${PWD}:/local openapitools/openapi-generator-cli generate \
 
 ```
 
-This generates [script.js](./k6-k6-oas3/script.js) and is a great start to help support defining your perf test cases.
+This generates [script.js](./k6-oas3/script.js) and is a great start to help support defining your perf test cases.
 
 **NB** It is boilerplate so will need to be refined after for re-use
 
