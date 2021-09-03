@@ -2140,10 +2140,10 @@ json5@^2.1.2:
   dependencies:
     minimist "^1.2.5"
 
-k6-html-reporter@1.0.3:
-  version "1.0.3"
-  resolved "https://registry.yarnpkg.com/k6-html-reporter/-/k6-html-reporter-1.0.3.tgz#03ce211a0c4396d126bc113140c730db36f01c1d"
-  integrity sha512-AD4hZChD7DE0Q1aFwYqADrAzUoYCW0cmUaFGhUUt6UvJnXxOeyIKVbinf59pNr2B7pvJHOu6ldbuMVfNvt+Dig==
+k6-html-reporter@1.0.4:
+  version "1.0.4"
+  resolved "https://registry.yarnpkg.com/k6-html-reporter/-/k6-html-reporter-1.0.4.tgz#b452faa2fbe2c8c48c1eaeceb0b959275b807810"
+  integrity sha512-SSDosuvkoDDC6RfBZ5g6dYOrHAn6rDFG/G689m0HQej3Y6+h2JTXgXYU/stQvCulu2YWBiQZwPJvY6DsJLpSOA==
   dependencies:
     ejs "^3.1.5"
 
