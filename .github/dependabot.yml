@@ -15,8 +15,8 @@ updates:
       # - dependency-name: "aws*"
       # Ignore some updates to the 'express' package
       # - dependency-name: "express"
-        # Ignore only new versions for 4.x and 5.x
-        # versions: ["4.x", "5.x"]
+      # Ignore only new versions for 4.x and 5.x
+      # versions: ["4.x", "5.x"]
       # For all packages, ignore all patch updates
       - dependency-name: "*"
         update-types: ["version-update:semver-patch"]
@@ -24,4 +24,3 @@ updates:
     directory: "/"
     schedule:
       interval: "monthly"
-
