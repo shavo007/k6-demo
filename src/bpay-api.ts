@@ -1,9 +1,13 @@
 import http from "k6/http";
 import { group, check, sleep } from "k6";
-import type { Payment, PaymentItem } from "./bpay";
+// import type { Payment, PaymentItem } from "./bpay";
 import { PaymentPaymentMethodEnum } from "./bpay";
 import { Options } from "k6/options";
 import { getToken, Options as BpayOptions } from "./helper";
+import { components } from "./bpay";
+
+type Payment = components["schemas"]["Payment"];
+type PaymentItem = components["schemas"]["PaymentItem"];
 
 const BASE_URL = "https://sandbox.api.bpaygroup.com.au/payments/v1";
 // Sleep duration between successive requests.
@@ -14,7 +18,7 @@ const SLEEP_DURATION = 0.1;
 export let options: Options = {
   vus: 1, //no. of concurrent visual users
   duration: "1s",
-  // httpDebug: "true",
+  httpDebug: "true",
 };
 
 export function setup() {
@@ -56,6 +60,7 @@ export default function ({ access_token = "" }: { access_token: string }) {
     payments.push(paymentItem);
     payments.push(paymentItem1);
     const payload = { payments };
+    // console.log(`payload ${JSON.stringify(payload)}`)
     let params = {
       headers: {
         "Content-Type": "application/json",

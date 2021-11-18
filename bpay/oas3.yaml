@@ -296,9 +296,9 @@ components:
           example: "651234567890123"
         amount:
           description: The amount of the payment.
-          type: string
+          type: number
           format: float
-          example: "234.83"
+          example: 234.83
         settlementDate:
           description: >-
             The date that the proposed payment will be

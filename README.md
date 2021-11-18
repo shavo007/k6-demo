@@ -103,6 +103,10 @@ docker run --rm -v ${PWD}:/local openapitools/openapi-generator-cli generate \
     --additional-properties=supportsES6=true,platform=node \
     --skip-validate-spec
 
+# OR generate types from OAS via openapi-typescript
+npx openapi-typescript bpay/oas3.yaml --output bpay/types/schema.ts
+npx openapi-typescript bpay/oas3.yaml --output src/bpay/schema.ts
+
 # gen k6 scripts
 docker run --rm -v ${PWD}:/local openapitools/openapi-generator-cli generate \
     -i /local/bpay/oas3.yaml \
@@ -111,7 +115,7 @@ docker run --rm -v ${PWD}:/local openapitools/openapi-generator-cli generate \
     --skip-validate-spec
 
 #run load test against bpay api
-yarn webpack
+yarn bundle
 CLIENT_ID=REDACTED CLIENT_SECRET=REDACTED k6 run dist/bpay.js
 ```
 
