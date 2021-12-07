@@ -3,11 +3,18 @@ import { Options } from "k6/options";
 import http, { Response } from "k6/http";
 import { padStart } from "lodash";
 import { textSummary } from "./helper";
+import { Trend } from "k6/metrics";
 
 // const BASE_URL = "http://localhost:8090";
 // const BASE_URL = "http://host.docker.internal:8090";
 // const BASE_URL = "http://greetings:8090";
+
+// 1. init code
+
 console.log(padStart("Hello TypeScript!", 20, " "));
+
+//custom define metric
+const durationInSeconds = new Trend("duration_in_seconds");
 
 export let options: Options = {
   vus: 5, //no. of concurrent virtual users
@@ -16,7 +23,7 @@ export let options: Options = {
   //if you want to fail the whole load test use thresholds
   thresholds: {
     http_req_failed: ["rate<0.01"], // http errors should be less than 1%
-    http_req_duration: ["p(95)<350"], // 95% of requests should be below 200ms
+    http_req_duration: ["p(95)<350"], // 95% of requests should be below 350ms
   },
   // httpDebug: "true",
   userAgent: "K6GreetingsDemo/1.0",
@@ -32,7 +39,14 @@ export let options: Options = {
   // ],
 };
 
+export function setup() {
+  //setup is called once off
+  // 2. setup code
+}
+
 export default () => {
+  // 3. VU code
+
   let baseUrl = __ENV.BASE_URL ?? "http://localhost:8090";
   let url = `${baseUrl}/greetings`;
   const res: Response = http.get(url, {
@@ -43,6 +57,9 @@ export default () => {
     "includes response header Content-Type": () =>
       res.headers["Content-Type"] === "application/json",
   });
+  // we know that the duration is in millisecond
+  // but for demonstration purposes, we convert it to second
+  durationInSeconds.add(res.timings.duration / 1000);
   sleep(1);
 };
 
