@@ -44,7 +44,7 @@ yarn
 To run a test written in TypeScript, we first have to transpile the TypeScript code into JavaScript and bundle the project
 
 ```bash
-yarn webpack
+yarn bundle
 ```
 
 This command creates the final test files to the `./dist` folder.
