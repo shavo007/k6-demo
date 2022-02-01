@@ -1169,10 +1169,10 @@
   resolved "https://registry.yarnpkg.com/@types/json-schema/-/json-schema-7.0.9.tgz#97edc9037ea0c38585320b28964dde3b39e4660d"
   integrity sha512-qcUXuemtEu+E5wZSJHNxUXeCZhAfXKQ41D+duX+VYPde7xyEVZci+/oXKJL13tnRs9lR2pr4fod59GT6/X1/yQ==
 
-"@types/k6@0.35.2":
-  version "0.35.2"
-  resolved "https://registry.yarnpkg.com/@types/k6/-/k6-0.35.2.tgz#e544be35e65c9225cec47d5f96f2de0e2bcbd549"
-  integrity sha512-5R8PRMHszrPJBvLSX4CJoxu3aUzzRKg0wFwTapiNj3hQ1cr/DPgayl6fmR4MXegI/G/zer4QalppMoSxIvrUVg==
+"@types/k6@0.36.0":
+  version "0.36.0"
+  resolved "https://registry.yarnpkg.com/@types/k6/-/k6-0.36.0.tgz#9e8b01bef7e5d41f897de7a5a9c15955a882aff5"
+  integrity sha512-VyPK2Nl4CeQ6MPcwt6pev0knT+2XeN0fsu+o/okPYpnMttyTmAzqU7r+1qnYzdLm7pfU5z2Rtd40aRgRiLAh5A==
 
 "@types/lodash@4.14.172":
   version "4.14.172"
