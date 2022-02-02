@@ -4,6 +4,7 @@ import http, { Response } from "k6/http";
 import { padStart } from "lodash";
 import { textSummary } from "./helper";
 import { Trend } from "k6/metrics";
+import { envs } from "./env";
 
 // const BASE_URL = "http://localhost:8090";
 // const BASE_URL = "http://host.docker.internal:8090";
@@ -12,6 +13,7 @@ import { Trend } from "k6/metrics";
 // 1. init code
 
 console.log(padStart("Hello TypeScript!", 20, " "));
+let env = __ENV.ENV ?? "local";
 
 //custom define metric
 const durationInSeconds = new Trend("duration_in_seconds");
@@ -47,8 +49,8 @@ export function setup() {
 export default () => {
   // 3. VU code
 
-  let baseUrl = __ENV.BASE_URL ?? "http://localhost:8090";
-  let url = `${baseUrl}/greetings`;
+  // let baseUrl = __ENV.BASE_URL ?? "http://localhost:8090";
+  let url = `${envs[env].api_url}/greetings`;
   const res: Response = http.get(url, {
     tags: { team: "digix", api: "greetings" },
   });

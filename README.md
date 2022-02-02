@@ -85,7 +85,7 @@ This auto-generation of the load test script will help streamline the API testin
 ```bash
 docker run -d -p8090:8081 shanelee007/greetings-api:latest #run greetings API
 yarn webpack
-k6 run -e BASE_URL=http://localhost:8090 dist/greetings.js
+k6 run -e ENV=local dist/greetings.js
 yarn html #generate a html report
 ```
 
@@ -127,7 +127,7 @@ CLIENT_ID=REDACTED CLIENT_SECRET=REDACTED k6 run dist/bpay.js
 docker compose up -d #run the services in the background
 docker-compose run -v \
     $PWD/dist:/scripts \
-    k6 run -e BASE_URL=http://host.docker.internal:8090  /scripts/greetings.js
+    k6 run -e ENV=docker  /scripts/greetings.js
 
 ```
 
