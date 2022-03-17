@@ -84,7 +84,7 @@ This auto-generation of the load test script will help streamline the API testin
 
 ```bash
 docker run -d -p8090:8081 shanelee007/greetings-api:latest #run greetings API
-yarn webpack
+yarn bundle
 k6 run -e ENV=local dist/greetings.js
 yarn html #generate a html report
 ```
