@@ -1289,10 +1289,10 @@
   resolved "https://registry.yarnpkg.com/@types/k6/-/k6-0.36.0.tgz#9e8b01bef7e5d41f897de7a5a9c15955a882aff5"
   integrity sha512-VyPK2Nl4CeQ6MPcwt6pev0knT+2XeN0fsu+o/okPYpnMttyTmAzqU7r+1qnYzdLm7pfU5z2Rtd40aRgRiLAh5A==
 
-"@types/lodash@4.14.172":
-  version "4.14.172"
-  resolved "https://registry.yarnpkg.com/@types/lodash/-/lodash-4.14.172.tgz#aad774c28e7bfd7a67de25408e03ee5a8c3d028a"
-  integrity sha512-/BHF5HAx3em7/KkzVKm3LrsD6HZAXuXO1AJZQ3cRRBZj4oHZDviWPYu0aEplAqDFNHZPW6d3G7KN+ONcCCC7pw==
+"@types/lodash@4.14.180":
+  version "4.14.180"
+  resolved "https://registry.yarnpkg.com/@types/lodash/-/lodash-4.14.180.tgz#4ab7c9ddfc92ec4a887886483bc14c79fb380670"
+  integrity sha512-XOKXa1KIxtNXgASAnwj7cnttJxS4fksBRywK/9LzRV5YxrF80BXZIGeQSuoESQ/VkUj30Ae0+YcuHc15wJCB2g==
 
 "@types/minimatch@*":
   version "3.0.4"
