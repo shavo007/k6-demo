@@ -31,7 +31,7 @@ jobs:
 
       - name: Run greetings api smoke tests
         run: |
-          curl https://github.com/k6io/k6/releases/download/v0.37.0/k6-v0.37.0-linux-amd64.tar.gz -L | tar xvz --strip-components 1
+          curl https://github.com/k6io/k6/releases/download/v0.38.0/k6-v0.38.0-linux-amd64.tar.gz -L | tar xvz --strip-components 1
           BASE_URL=http://localhost:8090 ./k6 run - <dist/greetings.js
         # uses: k6io/action@v0.2.0
         # with:
