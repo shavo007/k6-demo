@@ -22,44 +22,68 @@ export interface components {
     ValidationPayment: {
       payments?: components["schemas"]["PaymentItem"][];
     };
-    /** A response to a request to validate single or multiple BPAY payments */
+    /** @description A response to a request to validate single or multiple BPAY payments */
     ValidationResult: {
-      /** The results of the validation of the payment/s. */
+      /** @description The results of the validation of the payment/s. */
       validationResults?: components["schemas"]["ValidatonResultItem"][];
     };
     Error: {
-      /** The error code identifying the error type. */
+      /** @description The error code identifying the error type. */
       error?: string;
-      /** Indicates the description error. */
+      /** @description Indicates the description error. */
       errorDescription?: string;
     };
     ClientErrorItem: {
-      /** The error code identifying the format error. */
+      /**
+       * @description The error code identifying the format error.
+       * @example DUPLICATE_TIDS
+       */
       errCode?: string;
-      /** Identifies the field that caused the error. For example "CRN". */
+      /**
+       * @description Identifies the field that caused the error. For example "CRN".
+       * @example tid
+       */
       errField?: string;
-      /** Indicates the description error. For example invalid field format. */
+      /**
+       * @description Indicates the description error. For example invalid field format.
+       * @example Duplicate identifiers found.
+       */
       errMessage?: string;
     };
     ClientError: {
-      /** The end point application that made the API call */
+      /**
+       * @description The end point application that made the API call
+       * @example /payments/v1/validatepayments
+       */
       endpoint?: string;
-      /** HTTP method used for request (GET, POST, etc) */
+      /**
+       * @description HTTP method used for request (GET, POST, etc)
+       * @example POST
+       */
       httpmethod?: string;
-      /** Summary of the error returned. The end point must make use of the error code, error message and field to form a meaningful response to the end user. */
+      /** @description Summary of the error returned. The end point must make use of the error code, error message and field to form a meaningful response to the end user. */
       errorSummary?: components["schemas"]["ClientErrorItem"][];
     };
-    /** Represents the outcome of validating the details of an individual BPAY payment */
+    /** @description Represents the outcome of validating the details of an individual BPAY payment */
     ValidatonResultItem: {
-      /** Unique identifier for the BPAY payment being validated. This corresponds to the "tid" supplied in the corresponding PaymentValidationRequest. */
+      /**
+       * @description Unique identifier for the BPAY payment being validated. This corresponds to the "tid" supplied in the corresponding PaymentValidationRequest.
+       * @example 1
+       */
       tid?: string;
-      /** The collection of batch payments to be included in the batch file. Note that a maximum of 200 payments can be processed in a single request. */
+      /** @description The collection of batch payments to be included in the batch file. Note that a maximum of 200 payments can be processed in a single request. */
       validationSummary?: components["schemas"]["ValidationSummary"][];
     };
-    /** Error code and description for an invalid payment detail request. */
+    /**
+     * @description Error code and description for an invalid payment detail request.
+     * @example {
+     *   "validationResponseCode": "107",
+     *   "validationErrorDescription": "The BPAY Biller code is not valid. Please check your entry and try again."
+     * }
+     */
     ValidationSummary: {
       /**
-       * Returns a response code that indicates the result of validation. A value of '0' indicates that the transaction passed validation. Any non-zero value indicates that the payment failed validation.
+       * @description Returns a response code that indicates the result of validation. A value of '0' indicates that the transaction passed validation. Any non-zero value indicates that the payment failed validation.
        *   * 107
        *   * 109
        *   * 113
@@ -75,7 +99,7 @@ export interface components {
        */
       validationResponseCode?: string;
       /**
-       * If the transaction did not pass validation, then a human readable description of the validation error will be provided.
+       * @description If the transaction did not pass validation, then a human readable description of the validation error will be provided.
        * * 107 - The BPAY Biller code is not valid. Please check your entry and try again.
        * * 109 - The Payment Method is not accepted by the Biller. Please enter a different Payment Method.
        * * 113 - The BPAY Customer Reference Number you have entered is not valid. Please check your entry and try again.
@@ -92,19 +116,33 @@ export interface components {
       validationErrorDescription?: string;
     };
     PaymentItem: {
-      /** A unique identifier for the BPAY payment item being validated. This will be returned back in the response and can be used for correlating the response and request object elements. It must therefore be unique for each payment detail within the request. */
+      /**
+       * @description A unique identifier for the BPAY payment item being validated. This will be returned back in the response and can be used for correlating the response and request object elements. It must therefore be unique for each payment detail within the request.
+       * @example 1
+       */
       tid: string;
       payment: components["schemas"]["Payment"];
     };
     Payment: {
-      /** The Biller Code for the biller that will receive the payment. The Biller Code must be  a numeric value with 3 to 10 digits. */
+      /**
+       * @description The Biller Code for the biller that will receive the payment. The Biller Code must be  a numeric value with 3 to 10 digits.
+       * @example 565572
+       */
       billerCode: string;
-      /** The Customer Reference Number (CRN) for the payment. The CRN must contain numeric values but should be treated as a string as it may have leading zeros (which must be preserved). The CRN must contain between 2 and 20 digits. */
+      /**
+       * @description The Customer Reference Number (CRN) for the payment. The CRN must contain numeric values but should be treated as a string as it may have leading zeros (which must be preserved). The CRN must contain between 2 and 20 digits.
+       * @example 651234567890123
+       */
       crn: string;
-      /** The amount of the payment. */
+      /**
+       * Format: float
+       * @description The amount of the payment.
+       * @example 234.83
+       */
       amount: number;
       /**
-       * The date that the proposed payment will be submitted by the Financial Institution to BPAY for inclusion in settlement. Financial Institutions determine their own cut-off times each day for accepting payments to be submitted on the same day (typically between 3pm-6pm). Please consult with your Financial Institution regarding their BPAY Payment settlement cut-off time. The format of the date should be as defined by full-date in [RFC3339](https://xml2rfc.tools.ietf.org/public/rfc/html/rfc3339.html#anchor14).
+       * Format: date
+       * @description The date that the proposed payment will be submitted by the Financial Institution to BPAY for inclusion in settlement. Financial Institutions determine their own cut-off times each day for accepting payments to be submitted on the same day (typically between 3pm-6pm). Please consult with your Financial Institution regarding their BPAY Payment settlement cut-off time. The format of the date should be as defined by full-date in [RFC3339](https://xml2rfc.tools.ietf.org/public/rfc/html/rfc3339.html#anchor14).
        *
        * For example, consider the case where your Financial Institution’s cut-off time is 4pm.
        *
@@ -112,9 +150,15 @@ export interface components {
        * * If you are submitting the transaction to your Financial Institution at 6pm, you are submitting after their cut-off and so it will be submitted to BPAY on the following day for inclusion in settlement. You should use the next day’s date as the ‘Settlement Date’ when calling the API
        */
       settlementDate: string;
-      /** The type of payments methods accepted by the biller. For PaymentValidationRequest, values can be "001" (Debit), "101" (Visa), "201" (MasterCard), "301" (Other Credit Card). For GenerateBatchFileRequest, paymentMethod must be "001". Note that Billers are able to define the account types from which they will accept payment. The account type will be used to validate that the biller accepts payments from that type of account. */
+      /**
+       * @description The type of payments methods accepted by the biller. For PaymentValidationRequest, values can be "001" (Debit), "101" (Visa), "201" (MasterCard), "301" (Other Credit Card). For GenerateBatchFileRequest, paymentMethod must be "001". Note that Billers are able to define the account types from which they will accept payment. The account type will be used to validate that the biller accepts payments from that type of account.
+       * @enum {string}
+       */
       paymentMethod: "001" | "101" | "201" | "301";
-      /** The date that the proposed payment will be submitted by the customer to their Financial Institution for processing. Note that in the case of Batch Payers, this will need to correspond to the date that the Batch Payer submits the transaction to their FI for processing, not when the Batch Payer initially accepted it from their customer. This is used in those cases where the CRN includes an embedded due date. In such cases, the payment fails validation if the supplied Payment Date is after the Expiry Date extracted from the CRN. This field is optional and if its not provided will default to the current date. The format of the date should be as defined by full-date in [RFC3339](https://xml2rfc.tools.ietf.org/public/rfc/html/rfc3339.html#anchor14). */
+      /**
+       * Format: date
+       * @description The date that the proposed payment will be submitted by the customer to their Financial Institution for processing. Note that in the case of Batch Payers, this will need to correspond to the date that the Batch Payer submits the transaction to their FI for processing, not when the Batch Payer initially accepted it from their customer. This is used in those cases where the CRN includes an embedded due date. In such cases, the payment fails validation if the supplied Payment Date is after the Expiry Date extracted from the CRN. This field is optional and if its not provided will default to the current date. The format of the date should be as defined by full-date in [RFC3339](https://xml2rfc.tools.ietf.org/public/rfc/html/rfc3339.html#anchor14).
+       */
       paymentDate?: string;
     };
   };
