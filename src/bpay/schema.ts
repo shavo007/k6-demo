@@ -3,14 +3,20 @@
  * Do not make direct changes to the file.
  */
 
+
+/** Type helpers */
+type Without<T, U> = { [P in Exclude<keyof T, keyof U>]?: never };
+type XOR<T, U> = (T | U) extends object ? (Without<T, U> & U) | (Without<U, T> & T) : T | U;
+type OneOf<T extends any[]> = T extends [infer Only] ? Only : T extends [infer A, infer B, ...infer Rest] ? OneOf<[XOR<A, B>, ...Rest]> : never;
+
 export interface paths {
   "/validatepayments": {
     /**
-     * The Validate BPAY Payment API validates a set of one or more BPAY payment data records to ensure that all attributes are valid, and that the payment will be accepted for processing.
+     * @description The Validate BPAY Payment API validates a set of one or more BPAY payment data records to ensure that all attributes are valid, and that the payment will be accepted for processing.
      * *Authentication Required - The endpoint must always be invoked by a user with a valid access token.*
-     *
+     * 
      * **For scenarios to test in the 'Try this API' feature, refer to the Testing Guide [here.](/guides)**
-     *
+     * 
      * **Try our API products using Postman, refer to the Postman collections [here.](/postman)**
      */
     post: operations["postValidatePayments"];
@@ -20,12 +26,12 @@ export interface paths {
 export interface components {
   schemas: {
     ValidationPayment: {
-      payments?: components["schemas"]["PaymentItem"][];
+      payments?: (components["schemas"]["PaymentItem"])[];
     };
     /** @description A response to a request to validate single or multiple BPAY payments */
     ValidationResult: {
       /** @description The results of the validation of the payment/s. */
-      validationResults?: components["schemas"]["ValidatonResultItem"][];
+      validationResults?: (components["schemas"]["ValidatonResultItem"])[];
     };
     Error: {
       /** @description The error code identifying the error type. */
@@ -35,47 +41,47 @@ export interface components {
     };
     ClientErrorItem: {
       /**
-       * @description The error code identifying the format error.
+       * @description The error code identifying the format error. 
        * @example DUPLICATE_TIDS
        */
       errCode?: string;
       /**
-       * @description Identifies the field that caused the error. For example "CRN".
+       * @description Identifies the field that caused the error. For example "CRN". 
        * @example tid
        */
       errField?: string;
       /**
-       * @description Indicates the description error. For example invalid field format.
+       * @description Indicates the description error. For example invalid field format. 
        * @example Duplicate identifiers found.
        */
       errMessage?: string;
     };
     ClientError: {
       /**
-       * @description The end point application that made the API call
+       * @description The end point application that made the API call 
        * @example /payments/v1/validatepayments
        */
       endpoint?: string;
       /**
-       * @description HTTP method used for request (GET, POST, etc)
+       * @description HTTP method used for request (GET, POST, etc) 
        * @example POST
        */
       httpmethod?: string;
       /** @description Summary of the error returned. The end point must make use of the error code, error message and field to form a meaningful response to the end user. */
-      errorSummary?: components["schemas"]["ClientErrorItem"][];
+      errorSummary?: (components["schemas"]["ClientErrorItem"])[];
     };
     /** @description Represents the outcome of validating the details of an individual BPAY payment */
     ValidatonResultItem: {
       /**
-       * @description Unique identifier for the BPAY payment being validated. This corresponds to the "tid" supplied in the corresponding PaymentValidationRequest.
+       * @description Unique identifier for the BPAY payment being validated. This corresponds to the "tid" supplied in the corresponding PaymentValidationRequest. 
        * @example 1
        */
       tid?: string;
       /** @description The collection of batch payments to be included in the batch file. Note that a maximum of 200 payments can be processed in a single request. */
-      validationSummary?: components["schemas"]["ValidationSummary"][];
+      validationSummary?: (components["schemas"]["ValidationSummary"])[];
     };
     /**
-     * @description Error code and description for an invalid payment detail request.
+     * @description Error code and description for an invalid payment detail request. 
      * @example {
      *   "validationResponseCode": "107",
      *   "validationErrorDescription": "The BPAY Biller code is not valid. Please check your entry and try again."
@@ -117,7 +123,7 @@ export interface components {
     };
     PaymentItem: {
       /**
-       * @description A unique identifier for the BPAY payment item being validated. This will be returned back in the response and can be used for correlating the response and request object elements. It must therefore be unique for each payment detail within the request.
+       * @description A unique identifier for the BPAY payment item being validated. This will be returned back in the response and can be used for correlating the response and request object elements. It must therefore be unique for each payment detail within the request. 
        * @example 1
        */
       tid: string;
@@ -125,64 +131,78 @@ export interface components {
     };
     Payment: {
       /**
-       * @description The Biller Code for the biller that will receive the payment. The Biller Code must be  a numeric value with 3 to 10 digits.
+       * @description The Biller Code for the biller that will receive the payment. The Biller Code must be  a numeric value with 3 to 10 digits. 
        * @example 565572
        */
       billerCode: string;
       /**
-       * @description The Customer Reference Number (CRN) for the payment. The CRN must contain numeric values but should be treated as a string as it may have leading zeros (which must be preserved). The CRN must contain between 2 and 20 digits.
+       * @description The Customer Reference Number (CRN) for the payment. The CRN must contain numeric values but should be treated as a string as it may have leading zeros (which must be preserved). The CRN must contain between 2 and 20 digits. 
        * @example 651234567890123
        */
       crn: string;
       /**
-       * Format: float
-       * @description The amount of the payment.
+       * Format: float 
+       * @description The amount of the payment. 
        * @example 234.83
        */
       amount: number;
       /**
-       * Format: date
+       * Format: date 
        * @description The date that the proposed payment will be submitted by the Financial Institution to BPAY for inclusion in settlement. Financial Institutions determine their own cut-off times each day for accepting payments to be submitted on the same day (typically between 3pm-6pm). Please consult with your Financial Institution regarding their BPAY Payment settlement cut-off time. The format of the date should be as defined by full-date in [RFC3339](https://xml2rfc.tools.ietf.org/public/rfc/html/rfc3339.html#anchor14).
-       *
+       * 
        * For example, consider the case where your Financial Institution’s cut-off time is 4pm.
-       *
+       * 
        * * If you are submitting the transaction to your Financial Institution at 3pm, you are submitting before their cut-off and so it will be submitted to BPAY on the same day for inclusion in settlement. You should use the current day’s date as the ‘Settlement Date’ when calling the API.
        * * If you are submitting the transaction to your Financial Institution at 6pm, you are submitting after their cut-off and so it will be submitted to BPAY on the following day for inclusion in settlement. You should use the next day’s date as the ‘Settlement Date’ when calling the API
        */
       settlementDate: string;
       /**
-       * @description The type of payments methods accepted by the biller. For PaymentValidationRequest, values can be "001" (Debit), "101" (Visa), "201" (MasterCard), "301" (Other Credit Card). For GenerateBatchFileRequest, paymentMethod must be "001". Note that Billers are able to define the account types from which they will accept payment. The account type will be used to validate that the biller accepts payments from that type of account.
+       * @description The type of payments methods accepted by the biller. For PaymentValidationRequest, values can be "001" (Debit), "101" (Visa), "201" (MasterCard), "301" (Other Credit Card). For GenerateBatchFileRequest, paymentMethod must be "001". Note that Billers are able to define the account types from which they will accept payment. The account type will be used to validate that the biller accepts payments from that type of account. 
        * @enum {string}
        */
       paymentMethod: "001" | "101" | "201" | "301";
       /**
-       * Format: date
+       * Format: date 
        * @description The date that the proposed payment will be submitted by the customer to their Financial Institution for processing. Note that in the case of Batch Payers, this will need to correspond to the date that the Batch Payer submits the transaction to their FI for processing, not when the Batch Payer initially accepted it from their customer. This is used in those cases where the CRN includes an embedded due date. In such cases, the payment fails validation if the supplied Payment Date is after the Expiry Date extracted from the CRN. This field is optional and if its not provided will default to the current date. The format of the date should be as defined by full-date in [RFC3339](https://xml2rfc.tools.ietf.org/public/rfc/html/rfc3339.html#anchor14).
        */
       paymentDate?: string;
     };
   };
+  responses: never;
+  parameters: never;
+  requestBodies: never;
+  headers: never;
+  pathItems: never;
 }
 
+export type external = Record<string, never>;
+
 export interface operations {
-  /**
-   * The Validate BPAY Payment API validates a set of one or more BPAY payment data records to ensure that all attributes are valid, and that the payment will be accepted for processing.
-   * *Authentication Required - The endpoint must always be invoked by a user with a valid access token.*
-   *
-   * **For scenarios to test in the 'Try this API' feature, refer to the Testing Guide [here.](/guides)**
-   *
-   * **Try our API products using Postman, refer to the Postman collections [here.](/postman)**
-   */
+
   postValidatePayments: {
+    /**
+     * @description The Validate BPAY Payment API validates a set of one or more BPAY payment data records to ensure that all attributes are valid, and that the payment will be accepted for processing.
+     * *Authentication Required - The endpoint must always be invoked by a user with a valid access token.*
+     * 
+     * **For scenarios to test in the 'Try this API' feature, refer to the Testing Guide [here.](/guides)**
+     * 
+     * **Try our API products using Postman, refer to the Postman collections [here.](/postman)**
+     */
+    /** @description The payment details that are being submitted for validation. */
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["ValidationPayment"];
+      };
+    };
     responses: {
-      /** Response to indicate the request was successfully processed. Note that the order of the results should not be relied on to co-relate the response with the original request, rather use the "tid" included in the response for the co-relation. Note that the response is considered a 'success' (error code 200) regardless of whether the included payments are validated successfully or not. */
+      /** @description Response to indicate the request was successfully processed. Note that the order of the results should not be relied on to co-relate the response with the original request, rather use the "tid" included in the response for the co-relation. Note that the response is considered a 'success' (error code 200) regardless of whether the included payments are validated successfully or not. */
       200: {
         content: {
           "application/json": components["schemas"]["ValidationResult"];
         };
       };
       /**
-       * The request was invalid and the data supplied did not match the expected formats. Possible errors include:
+       * @description The request was invalid and the data supplied did not match the expected formats. Possible errors include:
        * * DUPLICATE_TIDS - Duplicate identifiers found.
        * * TID_MISSING - An identifier is required.
        * * PAYMENTS_MISSING - Payment details are required.
@@ -192,34 +212,26 @@ export interface operations {
           "application/json": components["schemas"]["ClientError"];
         };
       };
-      /** User is not authenticated. */
+      /** @description User is not authenticated. */
       401: {
         content: {
           "application/json": components["schemas"]["Error"];
         };
       };
-      /** User is authenticated but does not have sufficient permissions to use this service. */
+      /** @description User is authenticated but does not have sufficient permissions to use this service. */
       403: {
         content: {
           "application/json": components["schemas"]["Error"];
         };
       };
-      /** The number of payment records exceeds the limit. */
+      /** @description The number of payment records exceeds the limit. */
       413: {
         content: {
           "application/json": components["schemas"]["ClientError"];
         };
       };
-      /** Unexpected error was encountered processing the request. */
-      500: unknown;
-    };
-    /** The payment details that are being submitted for validation. */
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["ValidationPayment"];
-      };
+      /** @description Unexpected error was encountered processing the request. */
+      500: never;
     };
   };
 }
-
-export interface external {}
