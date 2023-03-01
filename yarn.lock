@@ -1254,10 +1254,10 @@
   resolved "https://registry.yarnpkg.com/@types/json-schema/-/json-schema-7.0.11.tgz#d421b6c527a3037f7c84433fd2c4229e016863d3"
   integrity sha512-wOuvG1SN4Us4rez+tylwwwCV1psiNVOkJeM3AUWUNWg/jDQY2+HE/444y5gc+jBmRqASOm2Oeh5c1axHobwRKQ==
 
-"@types/k6@0.42.0":
-  version "0.42.0"
-  resolved "https://registry.yarnpkg.com/@types/k6/-/k6-0.42.0.tgz#4e670579f8becd2032838d8760dd90914093d60f"
-  integrity sha512-btIVh1X3aC3iiYHL3J6vnWx65tFhTZyA6c3RjsizlVRAk80a83mL9ybwClUpxo/gl8C7nii1NGMGmmN7yH5doQ==
+"@types/k6@0.43.0":
+  version "0.43.0"
+  resolved "https://registry.yarnpkg.com/@types/k6/-/k6-0.43.0.tgz#177d2ed4582235dd9dd86b161eb5f36b19d4d70a"
+  integrity sha512-M7o3acfaUrvSJagBur05y36qE6I6IufE233pzroe6/hScuF6gG3bbnoZt+eaIQZGBwnHW3XCImpVPyPqLi3fhw==
 
 "@types/lodash@4.14.172":
   version "4.14.172"
