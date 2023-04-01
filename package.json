@@ -24,7 +24,7 @@
     "babel-loader": "9.1.0",
     "lodash": "4.17.21",
     "typescript": "4.9.4",
-    "webpack": "5.75.0"
+    "webpack": "5.77.0"
   },
   "devDependencies": {
     "@babel/plugin-proposal-nullish-coalescing-operator": "7.18.6",
